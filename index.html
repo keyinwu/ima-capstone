@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Keyin Capstone</title>
+    <script src="libraries/p5.js" type="text/javascript"></script>
+
+    <script src="libraries/p5.dom.js" type="text/javascript"></script>
+    <script src="libraries/p5.sound.js" type="text/javascript"></script>
+
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <script src="particle.js" type="text/javascript"></script>
+    <script src="flame.js" type="text/javascript"></script>
+    <script src="torus.js" type="text/javascript"></script>
+    <script src="sketch.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body>
+    <!-- <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">Toggle bottom offcanvas</button> -->
+    <div class="container-fluid vh-100 overflow-auto px-1 py-5">
+      <!-- 1.1 Be Large -->
+      <div id="large">
+        <div class="row gy-5">
+          <div class="col-md-10 offset-md-1 pc-title">
+            <div class="p-10">
+              <strong>求大 Be Large</strong>
+              <!-- <p class="lead"><strong>Be Large <mark>求大:</mark></strong></p> -->
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-1 mh-75 pc-content">
+            <div class="p-10">
+              以原始的审美意识进行高度夸张与概括地呈现
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-2 mh-75 pc-content">
+            <div class="p-10">
+              Highly exaggerated and generalized presentation with primitive aesthetic awareness. <br>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.2 Be Complete -->
+      <div id="complete">
+        <div class="row gy-5">
+          <div class="col-md-10 offset-md-1 pc-title">
+            <div class="p-10">
+              <strong>求全 Be Complete</strong>
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-1 mh-75 pc-content">
+            <div class="p-10">
+              体现阴阳五行的哲学观 纹样造型完整对称、动静相宜
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-2 mh-75 pc-content">
+            <div class="p-10">
+              The embodiment of the philosophy of Yin Yang and Five Phases. The pattern is complete and symmetrical, with movement and stillness blending together.<br>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.3 Be Lively -->
+      <div id="lively">
+        <div class="row gy-5">
+          <div class="col-md-10 offset-md-1 pc-title">
+            <div class="p-10">
+              <strong>求活 Be Lively</strong>
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-1 mh-75 pc-content">
+            <div class="p-10">
+              表达的是活泼开放 自由洒脱的一种精神情感
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-2 mh-75 pc-content">
+            <div class="p-10">
+              It expresses lively, open, free and easy spirits and emotions.<br>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.4 Red & Green -->
+      <div id="rng">
+        <div class="row gy-5">
+          <div class="col-md-10 offset-md-1 pc-title">
+            <div class="p-10">
+              <strong>大红大绿 Red & Green</strong>
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-1 mh-75 pc-content">
+            <div class="p-10">
+              大红大绿展现的是热烈、纯粹的民间情感
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-2 mh-75 pc-content">
+            <div class="p-10">
+              The bold colors express warm and pure folk sensibilities.<br>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.5 Imagery -->
+      <div id="imagery">
+        <div class="row gy-5">
+          <div class="col-md-10 offset-md-1 pc-title">
+            <div class="p-10">
+              <strong>意象 Imagery</strong>
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-1 mh-75 pc-content">
+            <div class="p-10">
+              神仙 瑞龙 祥云 飞鸟 人物 走兽 植物 等纹样皆是”以象寓意“ ”以意构象“ 千百年来追求吉祥的永恒主题，过年贴的窗花纹样以简洁的线条再现远古图腾、巫术崇拜、民俗文化的具象，代表了那个时代人们对于审美的追求
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-2 mh-75 pc-content">
+            <div class="p-10">
+              Immortals, auspicious dragons, auspicious clouds, birds, figures, animals, plants and other patterns are all "implication of images" and "construction of implication", the eternal theme of pursuing auspiciousness for thousands of years. The window patterns pasted on the New Year's Eve reproduce the representation of ancient totems, witchcraft and folk culture with simple lines, representing people's pursuit of aesthetics in that era.<br>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.6 Originated from Folk -->
+      <div id="folk">
+        <div class="row gy-5">
+          <div class="col-md-10 offset-md-1 pc-title">
+            <div class="p-10">
+              <strong>源于民间 Originated from Folk</strong>
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-1 mh-75 pc-content">
+            <div class="p-10">
+              对生活的表达和向往
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-2 mh-75 pc-content">
+            <div class="p-10">
+              Expressions and aspirations for life.<br>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.7 Gatekeeper Doll -->
+      <div id="doll">
+        <div class="row gy-5">
+          <div class="col-md-10 offset-md-1 pc-title">
+            <div class="p-10">
+              <strong>守门娃娃 Gatekeeper Doll</strong>
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-1 mh-75 pc-content">
+            <div class="p-10">
+              防瘟疫 保安康
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-2 mh-75 pc-content">
+            <div class="p-10">
+              Prevent Plague and Stay Healthy.<br>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.8 Ferocious Door God -->
+      <div id="doorgod">
+        <div class="row gy-5">
+          <div class="col-md-10 offset-md-1 pc-title">
+            <div class="p-10">
+              <strong>凶神恶煞的门神 Ferocious Door God</strong>
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-1 mh-75 pc-content">
+            <div class="p-10">
+              吓走妖魔鬼怪
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-2 mh-75 pc-content">
+            <div class="p-10">
+              Scare away monsters.<br>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.9 Tigers and Lions -->
+      <div id="tigers">
+        <div class="row gy-5">
+          <div class="col-md-10 offset-md-1 pc-title">
+            <div class="p-10">
+              <strong>老虎狮子 Tigers and Lions</strong>
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-1 mh-75 pc-content">
+            <div class="p-10">
+              镇宅
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-2 mh-75 pc-content">
+            <div class="p-10">
+              Guard the house.<br>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2.1 Textures -->
+      <div id="textures">
+        <div class="row gy-5">
+          <div class="col-md-10 offset-md-1 pc-title">
+            <div class="p-10">
+              <strong>剪纸肌理 Textures</strong>
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-1 mh-75 pc-content">
+            <div class="p-10">
+              圆点，月牙，锯齿；一成万物，天地同系 （与自然和谐共存的哲思）
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-2 mh-75 pc-content">
+            <div class="p-10">
+              Includes dots, crescents, serrations. All things live together, heaven and earth are destined. (philosophy of harmonious coexistence with nature).<br>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2.2 Serrations -->
+      <div id="serrations">
+        <div class="row gy-5">
+          <div class="col-md-10 offset-md-1 pc-title">
+            <div class="p-10">
+              <strong>锯齿纹 Serrations</strong>
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-1 mh-75 pc-content">
+            <div class="p-10">
+              柔软的绒毛 动物的牙齿 鱼的鳞片 花瓣的边缘； 以长短 疏密 曲直 刚柔 表达出丰富的韵律感和节奏感
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-2 mh-75 pc-content">
+            <div class="p-10">
+              Soft fluff, animal teeth, fish scales, edge of petals; express a rich sense of rhythm and rhythm with length, density, straightness and rigidity.<br>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2.3 Crescents -->
+      <div id="crescents">
+        <div class="row gy-5">
+          <div class="col-md-10 offset-md-1 pc-title">
+            <div class="p-10">
+              <strong>月牙纹 Crescents</strong>
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-1 mh-75 pc-content">
+            <div class="p-10">
+              人物的眼嘴 植物动物的弧度修饰 可长可短 可宽可窄 可曲可直
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-2 mh-75 pc-content">
+            <div class="p-10">
+              The eyes and mouth of the characters, the arc modification of plants and animals; long or short, wide or narrow, curved or straight.<br>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2.4 Mao Jiao -->
+      <div id="maojiao">
+        <div class="row gy-5">
+          <div class="col-md-10 offset-md-1 pc-title">
+            <div class="p-10">
+              <strong>冒铰 Mao Jiao</strong>
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-1 mh-75 pc-content">
+            <div class="p-10">
+              不打草稿。拿起剪刀红纸随意地剪
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-2 mh-75 pc-content">
+            <div class="p-10">
+              Don't make drafts. Pick up scissors and cut the red paper at will.<br>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3.1 Worship & Spiritualism -->
+      <div id="worship">
+        <div class="row gy-5">
+          <div class="col-md-10 offset-md-1 pc-title">
+            <div class="p-10">
+              <strong>祭祀招魂 Worship & Spiritualism</strong>
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-1 mh-75 pc-content">
+            <div class="p-10">
+              杜甫《彭衙行》 “暖汤濯我足 剪纸招我魂”
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-2 mh-75 pc-content">
+            <div class="p-10">
+              Warm soup washes my feet, and paper-cuts call my soul.<br>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3.2 Folk Witchcraft -->
+      <div id="witchcraft">
+        <div class="row gy-5">
+          <div class="col-md-10 offset-md-1 pc-title">
+            <div class="p-10">
+              <strong>民间巫俗 Folk Witchcraft</strong>
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-1 mh-75 pc-content">
+            <div class="p-10">
+              《三洞群先录》载 “时或以纸剪蝴蝶数千枚，以气吹之，成列而飞拍手即下”
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-2 mh-75 pc-content">
+            <div class="p-10">
+              Sometimes you cut out thousands of butterflies out of paper. Blow on them, and they will line up and flutter their wings out of the paper.<br>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3.3 The Art of Zhuyou -->
+      <div id="zhuyou">
+        <div class="row gy-5">
+          <div class="col-md-10 offset-md-1 pc-title">
+            <div class="p-10">
+              <strong>祝由之术 The Art of Zhuyou</strong>
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-1 mh-75 pc-content">
+            <div class="p-10">
+              古代的一种精神疗法。治疗小儿腹泻 “剪作花，贴眉心” 治疗难缠危急的产妇 “纸花剪如杏叶大，摊上贴脐心”。
+              <br>
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-2 mh-75 pc-content">
+            <div class="p-10">
+              An ancient spiritual therapy. For example, to treat children with diarrhea, cut paper into flowers and stick them between children’s eyebrows; to treat women having a difficult childbirth, cut paper the size of an apricot leaf and spread it over their belly buttons. <br>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3.4 Chinese New Year Customs -->
+      <div id="newyear">
+        <div class="row gy-5">
+          <div class="col-md-10 offset-md-1 pc-title">
+            <div class="p-10">
+              <strong>岁时节俗 Chinese New Year Customs</strong>
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-1 mh-75 pc-content">
+            <div class="p-10">
+              剪窗花 剪纸灯 剪纸钱 除五毒
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-2 mh-75 pc-content">
+            <div class="p-10">
+              Cut window grilles, paper-cut lamps, paper-cut money, remove five poisons (Centipedes, Vipers, Scorpions, Geckos and Toads).<br>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3.5 Wish -->
+      <div id="wish">
+        <div class="row gy-5">
+          <div class="col-md-10 offset-md-1 pc-title">
+            <div class="p-10">
+              <strong>祈愿 Wish</strong>
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-1 mh-75 pc-content">
+            <div class="p-10">
+              祈盼纳福迎祥 风调雨顺 丰衣足食 人丁兴旺 延年益寿 的朴素愿望
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-2 mh-75 pc-content">
+            <div class="p-10">
+              Pray for good fortune, good weather, good food and clothing, a prosperous family, and longevity.<br>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4.1 Various changes between square inches -->
+      <div id="various">
+        <div class="row gy-5">
+          <div class="col-md-10 offset-md-1 pc-title">
+            <div class="p-10">
+              <strong>方寸之间 百般变化 Various changes between square inches</strong>
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-1 mh-75 pc-content">
+            <div class="p-10">
+              剪纸用它特殊的语言，将无限的神韵藏于小小的尺幅之中。
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-2 mh-75 pc-content">
+            <div class="p-10">
+              Paper-cut uses its special language to hide infinite charm in a small area.<br>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4.2 The language of paper cutting -->
+      <div id="language">
+        <div class="row gy-5">
+          <div class="col-md-10 offset-md-1 pc-title">
+            <div class="p-10">
+              <strong>剪纸的语言 The language of paper cutting</strong>
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-1 mh-75 pc-content">
+            <div class="p-10">
+              千刻不落 万剪不断
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-2 mh-75 pc-content">
+            <div class="p-10">
+              Carve a thousand times without falling off, cut a thousand times without breaking.<br>
+            </div>
+          </div>
+        </div>
+      </div>
+
+       <!--
+       complete
+       lively
+       rng
+       imagery
+       folk
+       doll
+       doorgod
+       tigers
+       textures
+       serrations
+       crescents
+       maojiao
+       worship
+       witchcraft
+       zhuyou
+       newyear
+       wish
+       various
+       language
+
+       completeBuffer,
+       livelyBuffer,
+       rngBuffer,
+       imageryBuffer,
+       folkBuffer,
+       dollBuffer,
+       doorgodBuffer,
+       tigersBuffer,
+       texturesBuffer,
+       serrationsBuffer,
+       crescentsBuffer,
+       maojiaoBuffer,
+       worshipBuffer,
+       witchcraftBuffer,
+       zhuyouBuffer,
+       newyearBuffer,
+       wishBuffer,
+       variousBuffer,
+       languageBuffer,  -->
+
+
+
+    </div>
+
+  </body>
+</html>
