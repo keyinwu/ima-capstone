@@ -117,27 +117,28 @@ function preload(){
 
  large = loadImage('images/large.jpeg');
  complete = loadImage('images/complete.jpeg');
- lively = loadImage('images/lively.jpg');
+ lively = loadImage('images/lively.jpeg');
  rng = loadImage('images/rng.jpeg');
  imagery = loadImage('images/imagery.jpeg');
- folk = loadImage('images/folk.jpeg');
- doll = loadImage('images/doll.png');
+ // folk = loadImage('images/folk.jpeg');
+ doll = loadImage('images/doll.jpeg');
  doorgod = loadImage('images/doorgod.jpeg');
  tigers = loadImage('images/tigers.jpeg');
- textures = loadImage('images/large.jpeg'); //to change
- serrations = loadImage('images/large.jpeg'); //to change
- crescents = loadImage('images/large.jpeg'); //to change
- maojiao = loadImage('images/large.jpeg'); //to change
- worship = loadImage('images/large.jpeg'); //to change
- witchcraft = loadImage('images/large.jpeg'); //to change
- zhuyou = loadImage('images/large.jpeg'); //to change
- newyear = loadImage('images/large.jpeg'); //to change
- wish = loadImage('images/large.jpeg'); //to change
- various = loadImage('images/large.jpeg'); //to change
- language = loadImage('images/large.jpeg'); //to change
+ textures = loadImage('images/textures.jpeg');
+ serrations = loadImage('images/serrations.png');
+ crescents = loadImage('images/crescents.jpeg');
+ maojiao = loadImage('images/maojiao.png');
+ worship = loadImage('images/worship.jpeg');
+ witchcraft = loadImage('images/witchcraft.jpeg');
+ zhuyou = loadImage('images/zhuyou.jpeg');
+ newyear = loadImage('images/newyear.jpeg');
+ wish = loadImage('images/wish.jpeg');
+ various = loadImage('images/various.jpeg');
+ language = loadImage('images/language.jpeg');
 
- contents = [complete,lively,rng,imagery,folk,doll,doorgod,tigers,textures,serrations,crescents,maojiao,worship,witchcraft,zhuyou,newyear,wish,various,language];
- idnames = ["complete","lively","rng","imagery","folk","doll","doorgod","tigers","textures","serrations","crescents","maojiao","worship","witchcraft","zhuyou","newyear","wish","various","language"];
+ //folk removed
+ contents = [large,complete,lively,rng,imagery,doll,doorgod,tigers,textures,serrations,crescents,maojiao,worship,witchcraft,zhuyou,newyear,wish,various,language];
+ idnames = ["large","complete","lively","rng","imagery","doll","doorgod","tigers","textures","serrations","crescents","maojiao","worship","witchcraft","zhuyou","newyear","wish","various","language"];
 }
 
 function setup() {
@@ -273,38 +274,38 @@ function drawContents() {
     if (cameraZ > 700) {
       contentsSetup(contents[0], idnames[0], 0,0,900);
       contentsSetup(contents[1], idnames[1], -100,0,800);
-      contentsSetup(contents[2], idnames[2], -80,0,700);
-      contentsSetup(contents[3], idnames[3], 80,0,700);
-      contentsSetup(contents[4], idnames[4], 100,0,800);
+      contentsSetup(contents[3], idnames[3], -80,0,700);
+      contentsSetup(contents[4], idnames[4], 80,0,700);
+      contentsSetup(contents[2], idnames[2], 100,0,800);
     }
     contentsSetup(contents[5], idnames[5], -90,0,600);
     contentsSetup(contents[6], idnames[6], 0,0,600);
     contentsSetup(contents[7], idnames[7], 90,0,600);
 
   }
-  if (cameraZ < 650 && cameraZ >= 550) {
+  if (cameraZ < 650 && cameraZ >= 450) {
     contentsSetup(contents[8], idnames[8], -85,0,500);
-    contentsSetup(contents[9], idnames[9], -45,0,450);
-    contentsSetup(contents[10], idnames[10], 45,0,450);
+    contentsSetup(contents[9], idnames[9], -45,0,400);
+    contentsSetup(contents[10], idnames[10], 45,0,400);
     contentsSetup(contents[11], idnames[11], 85,0,500);
 
   }
-  if (cameraZ < 550 && cameraZ >= 350) {
-    contentsSetup(contents[12], idnames[12], -60,0,400);
-    contentsSetup(contents[13], idnames[13], 0,0,400);
-    contentsSetup(contents[14], idnames[14], 60,0,400);
-    contentsSetup(contents[15], idnames[15], -40,0,300);
-    contentsSetup(contents[16], idnames[16], 40,0,300);
+  if (cameraZ < 450 && cameraZ >= 250) {
+    contentsSetup(contents[12], idnames[12], -60,0,300);
+    contentsSetup(contents[13], idnames[13], 0,0,300);
+    contentsSetup(contents[14], idnames[14], 60,0,300);
+    contentsSetup(contents[15], idnames[15], -40,0,200);
+    contentsSetup(contents[16], idnames[16], 40,0,200);
   }
-  if (cameraZ < 350 && cameraZ >= 150) {
-    contentsSetup(contents[17], idnames[17], 0,0,200);
-    contentsSetup(contents[18], idnames[18], 0,0,100);
+  if (cameraZ < 250 && cameraZ >= 50) {
+    contentsSetup(contents[17], idnames[17], 0,0,100);
+    contentsSetup(contents[18], idnames[18], 0,0,0);
   }
 
   //show pattern
-  if (cameraZ < 150) {
+  if (cameraZ < 50) {
     push();
-    translate(0, 0, 80);
+    translate(0, 0, -100);
     rotateY(frameCount * 0.03)
     rotateX(frameCount * 0.02)
     texture(patternBuffer);
@@ -393,13 +394,16 @@ function drawPattern() {
   // patternBuffer.pop();
 }
 
-function contentsSetup(content, id, cx, cy, cz) {
+function contentsSetup(content, id, cx, cy, cz, logging=false) {
   push();
   translate(cx, cy, cz);
   translate(0,10,10);
   let newtorus = new Torus(cx, cz+10, cameraX, cameraZ, content, id); //to change
   // newtorus.show();
   newtorus.update();
+  if (logging) { // for debug
+    newtorus.logging();
+  }
   cameraLock = cameraLock || newtorus.isLock();
   pop();
 }

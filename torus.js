@@ -18,6 +18,7 @@ class Torus {
     //trigger flame
     // if (dis < 90 && this.camZ - this.z > 60) {
     if (this.camX-this.x < 40 && this.camX-this.x > -40 && this.camZ - this.z < 90 && this.camZ - this.z > 60) {
+      console.log("yes");
       this.cameraL = true;
       // push();
       // texture(this.buffer);
@@ -63,8 +64,12 @@ class Torus {
     push();
     translate(0,-10,-10);
     texture(cbuffer);
-    plane(100, 100); // to change
+    plane(120, 120); // to change
     pop();
+  }
+
+  logging(){
+    console.log(this.camX-this.x, this.camZ - this.z);
   }
 
 }
