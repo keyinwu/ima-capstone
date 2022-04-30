@@ -23,7 +23,7 @@ let delta_x = 0;
 let delta_y = 0;
 let xangle = 0;
 let yangle = 0;
-let cspeed = 5;
+let cspeed = 2;
 let movespeed;
 let prevX;
 let prevY;
@@ -74,6 +74,13 @@ let languageBuffer;
 let contents;
 let idnames;
 // let buffers = [completeBuffer,livelyBuffer,rngBuffer,imageryBuffer,folkBuffer,dollBuffer,doorgodBuffer,tigersBuffer,texturesBuffer,serrationsBuffer,crescentsBuffer,maojiaoBuffer,worshipBuffer,witchcraftBuffer,zhuyouBuffer,newyearBuffer,wishBuffer,variousBuffer,languageBuffer]
+
+let symbols=[];
+
+// to finish
+let symtex;
+let completeM,model1,model2,model3,model5,model6;
+let models;
 
 //leftBuffer
 // let cam;
@@ -139,6 +146,17 @@ function preload(){
  //folk removed
  contents = [large,complete,lively,rng,imagery,doll,doorgod,tigers,textures,serrations,crescents,maojiao,worship,witchcraft,zhuyou,newyear,wish,various,language];
  idnames = ["large","complete","lively","rng","imagery","doll","doorgod","tigers","textures","serrations","crescents","maojiao","worship","witchcraft","zhuyou","newyear","wish","various","language"];
+
+ // to change
+ symtex = loadImage('images/texture3.jpeg');
+ completeM = loadModel('assets/4.obj');
+ model1 = loadModel('assets/complete.obj');
+ model2 = loadModel('assets/lively.obj');
+ model3 = loadModel('assets/3.obj');
+ model5 = loadModel('assets/5.obj');
+ model6 = loadModel('assets/6.obj');
+
+ models = [completeM,model1,model2,model3,model6,model5,model6,completeM,model2,model1,completeM,completeM,completeM,completeM,completeM,completeM,completeM,completeM,completeM];
 }
 
 function setup() {
@@ -169,7 +187,10 @@ function setup() {
     patternBuffer.fill(rightColor);
     patternBuffer.ellipse(size / 2, size / 2, 2*bg_r, 2*bg_r);
 
-
+    for (var i = 0; i < contents.length; i++) {
+      let newsym = new Torus(contents[i], idnames[i], models[i]); //to change
+      symbols.push(newsym)
+    }
     // tB1 = createGraphics(200, 200);
     // tB2 = createGraphics(200, 200);
 
@@ -262,52 +283,63 @@ function drawMove() {
   if (mouseIsPressed) {
     cameraZ -= cspeed
   }
-  camera(cameraX, cameraY, cameraZ, delta_x, delta_y, 0, 0, 1, 0);
+  if (keyIsPressed) {  // to change into zoom in/out
+    cameraZ += cspeed
+  }
+  camera(cameraX, cameraY, cameraZ, delta_x, delta_y, -50, 0, 1, 0);
 }
 
 function drawContents() {
   background(0);
-  ambientLight(240);
+  ambientLight(200);
+  // directionalLight(255, 255, 255, 0, 0, 1);
 
   // Contents on Display
   if (cameraZ >= 650) {
     if (cameraZ > 700) {
-      contentsSetup(contents[0], idnames[0], 0,0,900);
-      contentsSetup(contents[1], idnames[1], -100,0,800);
-      contentsSetup(contents[3], idnames[3], -80,0,700);
-      contentsSetup(contents[4], idnames[4], 80,0,700);
-      contentsSetup(contents[2], idnames[2], 100,0,800);
+      // push();
+      // translate(0,0,920);
+      // rotateZ(PI);
+      // normalMaterial();
+      // // texture(largetst);
+      // model(completeM);
+      // pop();
+      contentsSetup(symbols[0], 0,0,900);
+      contentsSetup(symbols[1], -100,0,800);
+      contentsSetup(symbols[3], -80,0,700);
+      contentsSetup(symbols[4], 80,0,700);
+      contentsSetup(symbols[2], 100,0,800);
     }
-    contentsSetup(contents[5], idnames[5], -90,0,600);
-    contentsSetup(contents[6], idnames[6], 0,0,600);
-    contentsSetup(contents[7], idnames[7], 90,0,600);
+    contentsSetup(symbols[5], -90,0,600);
+    contentsSetup(symbols[6], 0,0,600);
+    contentsSetup(symbols[7], 90,0,600);
 
   }
   if (cameraZ < 650 && cameraZ >= 450) {
-    contentsSetup(contents[8], idnames[8], -85,0,500);
-    contentsSetup(contents[9], idnames[9], -45,0,400);
-    contentsSetup(contents[10], idnames[10], 45,0,400);
-    contentsSetup(contents[11], idnames[11], 85,0,500);
+    contentsSetup(symbols[8], -85,0,500);
+    contentsSetup(symbols[9], -45,0,400);
+    contentsSetup(symbols[10], 45,0,400);
+    contentsSetup(symbols[11], 85,0,500);
 
   }
   if (cameraZ < 450 && cameraZ >= 250) {
-    contentsSetup(contents[12], idnames[12], -60,0,300);
-    contentsSetup(contents[13], idnames[13], 0,0,300);
-    contentsSetup(contents[14], idnames[14], 60,0,300);
-    contentsSetup(contents[15], idnames[15], -40,0,200);
-    contentsSetup(contents[16], idnames[16], 40,0,200);
+    contentsSetup(symbols[12], -60,0,300);
+    contentsSetup(symbols[13], 0,0,300);
+    contentsSetup(symbols[14], 60,0,300);
+    contentsSetup(symbols[15], -40,0,200);
+    contentsSetup(symbols[16], 40,0,200);
   }
   if (cameraZ < 250 && cameraZ >= 50) {
-    contentsSetup(contents[17], idnames[17], 0,0,100);
-    contentsSetup(contents[18], idnames[18], 0,0,0);
+    contentsSetup(symbols[17], 0,0,100);
+    contentsSetup(symbols[18], 0,0,0);
   }
 
   //show pattern
   if (cameraZ < 50) {
     push();
-    translate(0, 0, -100);
-    rotateY(frameCount * 0.03)
-    rotateX(frameCount * 0.02)
+    translate(0, 0, -10);
+    // rotateZ(frameCount * 0.03)
+    // rotateX(frameCount * 0.02)
     texture(patternBuffer);
     plane(100);
     pop();
@@ -343,23 +375,23 @@ function drawContents() {
 function drawPattern() {
   let moved = sqrt(pow(cameraX-prevX,2)+pow(cameraZ-prevZ,2));
   // console.log(moved);
-  if (moved < 3 && r < 10){ // to change
+  if (moved < 3 && r < 12){ // to change
     if (!stopcheck) {
       timecheck = frameCount;
       stopcheck = true;
       r += 0.2;
     } else {
-      if (frameCount - timecheck > 100) {
-        cpairs.push(camtoPatt(cameraX, cameraZ));
-        r += 0.5;
+      if (frameCount - timecheck > 20) {
+        // cpairs.push(camtoPatt(cameraX, cameraZ));
+        r += 0.1;
       }
     }
-  }else if (r < 5){
+  }else if (r < 6){
     stopcheck = false;
-    r += 0.5;
+    r += 0.8;
   }else{
     stopcheck = false;
-    r = 0.5;
+    r = 0.8;
   }
   prevX = cameraX;
   prevZ = cameraZ;
@@ -370,7 +402,7 @@ function drawPattern() {
   // version 1
   patternBuffer.push();
   patternBuffer.translate(patternBuffer.width / 2, patternBuffer.height / 2);
-  patternBuffer.rotate(PI * millis() / 10.0 / 2500); //3.0
+  patternBuffer.rotate(PI * millis() / 5.0 / 2500); //3.0
   for (let j = 0; j < 12; j++) {
     let x = d * cos(theta+j*PI/6);
     let y = d * sin(theta+j*PI/6);
@@ -394,17 +426,15 @@ function drawPattern() {
   // patternBuffer.pop();
 }
 
-function contentsSetup(content, id, cx, cy, cz, logging=false) {
+function contentsSetup(symbol, cx, cy, cz, logging=false) {
   push();
   translate(cx, cy, cz);
   translate(0,10,10);
-  let newtorus = new Torus(cx, cz+10, cameraX, cameraZ, content, id); //to change
-  // newtorus.show();
-  newtorus.update();
+  symbol.update(cx, cz+10, cameraX, cameraZ);
   if (logging) { // for debug
-    newtorus.logging();
+    symbol.logging();
   }
-  cameraLock = cameraLock || newtorus.isLock();
+  cameraLock = cameraLock || symbol.isLock();
   pop();
 }
 
