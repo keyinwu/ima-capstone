@@ -223,7 +223,7 @@ function draw() {
     resizeCanvas(windowWidth, windowHeight, WEBGL);
     drawMove();
     drawContents();
-    // drawFloor(); to do
+    drawFloor(); //to do
     drawPattern();
 
 }
@@ -286,7 +286,7 @@ function drawMove() {
   if (keyIsPressed) {  // to change into zoom in/out
     cameraZ += cspeed
   }
-  camera(cameraX, cameraY, cameraZ, delta_x, delta_y, -50, 0, 1, 0);
+  camera(cameraX, cameraY, cameraZ, delta_x, delta_y, -150, 0, 1, 0);
 }
 
 function drawContents() {
@@ -337,11 +337,11 @@ function drawContents() {
   //show pattern
   if (cameraZ < 50) {
     push();
-    translate(0, 0, -10);
+    translate(0, 0, -100);
     // rotateZ(frameCount * 0.03)
     // rotateX(frameCount * 0.02)
     texture(patternBuffer);
-    plane(100);
+    plane(130);
     pop();
   }
 
@@ -402,7 +402,7 @@ function drawPattern() {
   // version 1
   patternBuffer.push();
   patternBuffer.translate(patternBuffer.width / 2, patternBuffer.height / 2);
-  patternBuffer.rotate(PI * millis() / 5.0 / 2500); //3.0
+  patternBuffer.rotate(PI * millis() / 3.0 / 2500); //3.0
   for (let j = 0; j < 12; j++) {
     let x = d * cos(theta+j*PI/6);
     let y = d * sin(theta+j*PI/6);
@@ -501,53 +501,54 @@ function censym(xy, r, cp) {
 //     // rightBuffer.circle(xpos,ypos,10);
 // }
 
-// function drawFloor() {
-//     push();
-//     translate(width/2, height/2-200, 0);
-//     rotateY(PI/2);
-//     stroke(200);
-//     strokeWeight(3);
-//     noFill();
-//     // arc(0, 0, 800, 800, -PI/12, PI/12, PIE);
-//     pop();
-//
-//     // moveBuffer.background(20);
-//     // moveBuffer.stroke(255, 245, 153);
-//     // stroke(200);
-//     // strokeWeight(3);
-//     // noFill();
-//     // arc(originx, originy, fansize, fansize, -PI/12, PI/12, PIE);
-//     //
-//     // //position mapping
-//     // fand = sqrt(pow(mouseX-originx,2)+pow((mouseY-size)-originy,2));
-//     // fantheta = atan2((mouseY-size)-originy, mouseX-originx); // +- 1/12PI
-//     // if (fand < 0){
-//     //   fand = 0;
-//     // }
-//     // if (fand > fansize / 2){
-//     //   fand = fansize / 2;
-//     // }
-//     // if (fantheta < -PI/12){
-//     //   fantheta = -PI/12;
-//     // }
-//     // if (fantheta > PI/12){
-//     //   fantheta = PI/12;
-//     // }
-//     // if (frameCount % 3 == 0){
-//     //   particle.update(originx+fand * cos(fantheta), originy+fand * sin(fantheta));
-//     // }
-//     // particle.show();
-//     // // moveBuffer.push();
-//     // // moveBuffer.noStroke();
-//     // // moveBuffer.fill(255, 245, 153);
-//     // // moveBuffer.circle(originx+fand * cos(fantheta), originy+fand * sin(fantheta), 10);
-//     // // moveBuffer.pop();
-//     // let fand_ = map(fand, 0, fansize/2, 0, size);
-//     // let fantheta_ = map(fantheta, -PI/12, PI/12, 0, PI/2);
-//     // xpos = fand_ * cos(fantheta_);
-//     // ypos = fand_ * sin(fantheta_);
-//
-// }
+function drawFloor() {
+    push();
+    translate(0, 50, 900);
+    rotateY(PI/2);
+    rotateX(PI/2);
+    stroke(255, 169, 56);
+    strokeWeight(3);
+    noFill();
+    arc(0, 0, 1900, 1900, -PI/6, PI/6, PIE);
+    pop();
+
+    // moveBuffer.background(20);
+    // moveBuffer.stroke(255, 245, 153);
+    // stroke(200);
+    // strokeWeight(3);
+    // noFill();
+    // arc(originx, originy, fansize, fansize, -PI/12, PI/12, PIE);
+    //
+    // //position mapping
+    // fand = sqrt(pow(mouseX-originx,2)+pow((mouseY-size)-originy,2));
+    // fantheta = atan2((mouseY-size)-originy, mouseX-originx); // +- 1/12PI
+    // if (fand < 0){
+    //   fand = 0;
+    // }
+    // if (fand > fansize / 2){
+    //   fand = fansize / 2;
+    // }
+    // if (fantheta < -PI/12){
+    //   fantheta = -PI/12;
+    // }
+    // if (fantheta > PI/12){
+    //   fantheta = PI/12;
+    // }
+    // if (frameCount % 3 == 0){
+    //   particle.update(originx+fand * cos(fantheta), originy+fand * sin(fantheta));
+    // }
+    // particle.show();
+    // // moveBuffer.push();
+    // // moveBuffer.noStroke();
+    // // moveBuffer.fill(255, 245, 153);
+    // // moveBuffer.circle(originx+fand * cos(fantheta), originy+fand * sin(fantheta), 10);
+    // // moveBuffer.pop();
+    // let fand_ = map(fand, 0, fansize/2, 0, size);
+    // let fantheta_ = map(fantheta, -PI/12, PI/12, 0, PI/2);
+    // xpos = fand_ * cos(fantheta_);
+    // ypos = fand_ * sin(fantheta_);
+
+}
 
 // function drawShowBuffer() {
 //     showBuffer.background(0);

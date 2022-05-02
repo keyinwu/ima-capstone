@@ -40,12 +40,15 @@ class Torus {
       }
       // console.log(this.alpha);
       this.view(this.buffer, this.alpha);
-      // console.log("yes!");
     }
     else{
       this.alpha = 0;
       this.cameraL = false;
       this.fadeout(this.id);
+      // if (this.alpha > 0) {
+      //   this.alpha -= 2;
+      //   this.view(this.buffer, this.alpha);
+      // }
       this.show();
       // document.getElementById(this.id).style.display = "none"; // to normalize
     }
@@ -100,7 +103,9 @@ class Torus {
       this.opacity -= 0.1;
     }
     document.getElementById(id).style.opacity = this.opacity;
-    document.getElementById(id).style.display = "none";
+    if (this.opacity <= 1) {
+      document.getElementById(id).style.display = "none";
+    }
   }
 
   logging(){
