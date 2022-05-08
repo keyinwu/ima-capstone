@@ -1,6 +1,7 @@
 html, body {
   margin: 0;
   padding: 0;
+  background-color: black;
 }
 canvas {
   display: block;
@@ -27,7 +28,7 @@ div.pc-content {
   text-align: left;
 }
 
-#large, #complete, #lively, #rng, #imagery, #folk, #doll, #doorgod, #tigers, #textures, #serrations, #crescents, #maojiao, #worship, #witchcraft, #zhuyou, #newyear, #wish, #various, #language {
+#large, #complete, #lively, #animism, #imagery, #folk, #doll, #doorgod, #tigers, #textures, #serrations, #crescents, #maojiao, #worship, #witchcraft, #zhuyou, #newyear, #wish, #various, #language {
   display: none;
   opacity: 0;
 }
@@ -39,4 +40,23 @@ div.pc-content {
 
 .strong {
    font-weight: 600;
+}
+
+div#loadingbar-container {
+  background-color: aqua;
+  width: 60%;
+  height: 100px;
+  padding: 10px;
+
+  z-index: 10;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+div#loadingbar {
+  background-color: red;
+  width: 100%;
+  height: 100%;
 }

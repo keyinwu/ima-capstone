@@ -1,5 +1,11 @@
 "use strict"
 
+let loading = true;
+let loadCounter = 0;
+let scene = 0;
+
+let myFont;
+
 let leftBuffer;
 let rightBuffer;
 let moveBuffer;
@@ -36,8 +42,8 @@ let complete;
 let completeBuffer;
 let lively;
 let livelyBuffer;
-let rng;
-let rngBuffer;
+let animism;
+let animismBuffer;
 let imagery;
 let imageryBuffer;
 let folk;
@@ -71,16 +77,17 @@ let variousBuffer;
 let language;
 let languageBuffer;
 
-let contents;
-let idnames;
-// let buffers = [completeBuffer,livelyBuffer,rngBuffer,imageryBuffer,folkBuffer,dollBuffer,doorgodBuffer,tigersBuffer,texturesBuffer,serrationsBuffer,crescentsBuffer,maojiaoBuffer,worshipBuffer,witchcraftBuffer,zhuyouBuffer,newyearBuffer,wishBuffer,variousBuffer,languageBuffer]
+let contents=[];
+let idnames= ["large","complete","lively","animism","imagery","doll","doorgod","tigers","textures","serrations","crescents","maojiao","worship","witchcraft","zhuyou","newyear","wish","various","language"];
+
+// let buffers = [completeBuffer,livelyBuffer,animismBuffer,imageryBuffer,folkBuffer,dollBuffer,doorgodBuffer,tigersBuffer,texturesBuffer,serrationsBuffer,crescentsBuffer,maojiaoBuffer,worshipBuffer,witchcraftBuffer,zhuyouBuffer,newyearBuffer,wishBuffer,variousBuffer,languageBuffer]
 
 let symbols=[];
 
 // to finish
 let symtex;
 let completeM,model1,model2,model3,model5,model6;
-let models;
+let models=[];
 
 //leftBuffer
 // let cam;
@@ -97,7 +104,8 @@ let models;
 // let originx;
 // let originy;
 // let fansize;
-// let particle;
+let particle;
+let floorBuffer;
 
 // let xpos;
 // let ypos;
@@ -114,56 +122,147 @@ let theta;
 let bg_r;
 let cpairs = [];
 
+let colorChange = false;
+
 let timecheck;
 let stopcheck = false;
 
+let totalAssets = 26;
+let assetArray = [];
+
+function updateLoadingBar(asset) {
+  assetArray.push(asset);
+  console.log(assetArray.length);
+
+  let bar = document.getElementById("loadingbar");
+  bar.style.width = floor(100 * assetArray.length / totalAssets) + "%";
+
+  if (assetArray.length == totalAssets) {
+    let barContainer = document.getElementById("loadingbar-container");
+    barContainer.style.display = "none";
+  }
+}
 
 function preload(){
- // textimg = loadImage('text.png');
- // imgMask = loadImage('mask.png');
+  // to change
+  large = loadImage('images/large.jpeg', updateLoadingBar);
+  complete = loadImage('images/complete.jpeg', updateLoadingBar);
+  lively = loadImage('images/lively.jpeg', updateLoadingBar);
+  animism = loadImage('images/animism.jpeg', updateLoadingBar);
+  imagery = loadImage('images/imagery.jpeg', updateLoadingBar);
+  // folk = loadImage('images/folk.jpeg', updateLoadingBar);
+  doll = loadImage('images/doll.jpeg', updateLoadingBar);
+  doorgod = loadImage('images/doorgod.jpeg', updateLoadingBar);
+  tigers = loadImage('images/tigers.jpeg', updateLoadingBar);
+  textures = loadImage('images/textures.jpeg', updateLoadingBar);
+  serrations = loadImage('images/serrations.png', updateLoadingBar);
+  crescents = loadImage('images/crescents.jpeg', updateLoadingBar);
+  maojiao = loadImage('images/maojiao.png', updateLoadingBar);
+  worship = loadImage('images/worship.jpeg', updateLoadingBar);
+  witchcraft = loadImage('images/witchcraft.jpeg', updateLoadingBar);
+  zhuyou = loadImage('images/zhuyou.jpeg', updateLoadingBar);
+  newyear = loadImage('images/newyear.jpeg', updateLoadingBar);
+  wish = loadImage('images/wish.jpeg', updateLoadingBar);
+  various = loadImage('images/various.jpeg', updateLoadingBar);
+  language = loadImage('images/language.jpeg', updateLoadingBar);
 
- large = loadImage('images/large.jpeg');
- complete = loadImage('images/complete.jpeg');
- lively = loadImage('images/lively.jpeg');
- rng = loadImage('images/rng.jpeg');
- imagery = loadImage('images/imagery.jpeg');
- // folk = loadImage('images/folk.jpeg');
- doll = loadImage('images/doll.jpeg');
- doorgod = loadImage('images/doorgod.jpeg');
- tigers = loadImage('images/tigers.jpeg');
- textures = loadImage('images/textures.jpeg');
- serrations = loadImage('images/serrations.png');
- crescents = loadImage('images/crescents.jpeg');
- maojiao = loadImage('images/maojiao.png');
- worship = loadImage('images/worship.jpeg');
- witchcraft = loadImage('images/witchcraft.jpeg');
- zhuyou = loadImage('images/zhuyou.jpeg');
- newyear = loadImage('images/newyear.jpeg');
- wish = loadImage('images/wish.jpeg');
- various = loadImage('images/various.jpeg');
- language = loadImage('images/language.jpeg');
+  //folk removed
+  contents = [large, complete, lively, animism, imagery, doll, doorgod, tigers, textures, serrations, crescents, maojiao, worship, witchcraft, zhuyou, newyear, wish, various, language];
+  idnames = ["large", "complete", "lively", "animism", "imagery", "doll", "doorgod", "tigers", "textures", "serrations", "crescents", "maojiao", "worship", "witchcraft", "zhuyou", "newyear", "wish", "various", "language"];
 
- //folk removed
- contents = [large,complete,lively,rng,imagery,doll,doorgod,tigers,textures,serrations,crescents,maojiao,worship,witchcraft,zhuyou,newyear,wish,various,language];
- idnames = ["large","complete","lively","rng","imagery","doll","doorgod","tigers","textures","serrations","crescents","maojiao","worship","witchcraft","zhuyou","newyear","wish","various","language"];
+  // to change
+  symtex = loadImage('images/texture4.jpeg', updateLoadingBar);
+  completeM = loadModel('assets/lively.obj', updateLoadingBar);
+  model1 = loadModel('assets/complete.obj', updateLoadingBar);
+  model2 = loadModel('assets/lively.obj', updateLoadingBar);
+  model3 = loadModel('assets/crescents.obj', updateLoadingBar);
+  model5 = loadModel('assets/wish.obj', updateLoadingBar);
+  model6 = loadModel('assets/language.obj', updateLoadingBar);
 
- // to change
- symtex = loadImage('images/texture3.jpeg');
- completeM = loadModel('assets/4.obj');
- model1 = loadModel('assets/complete.obj');
- model2 = loadModel('assets/lively.obj');
- model3 = loadModel('assets/3.obj');
- model5 = loadModel('assets/5.obj');
- model6 = loadModel('assets/6.obj');
+  models = [completeM, model1, model2, model3, model6, model5, model6, completeM, model2, model1, completeM, completeM, completeM, completeM, completeM, completeM, completeM, completeM, completeM];
 
- models = [completeM,model1,model2,model3,model6,model5,model6,completeM,model2,model1,completeM,completeM,completeM,completeM,completeM,completeM,completeM,completeM,completeM];
+  // symtex = loadImage('images/texture4.jpeg');
+  // myFont = loadFont('fonts/Inconsolata-Medium.ttf');
+ }
+
+function imageLoading(index, filename) {
+  loadImage(filename, imageLoaded);
+  function imageLoaded(img){
+    img.filter(INVERT);
+    img.filter(GRAY);
+    contents[index] = img;
+    loadCounter++;
+    // console.log(loadCounter, index, filename);
+    if (loadCounter == 19) {
+      console.log("loading models...");
+      startModelLoading();
+    }
+  }
+}
+
+function startModelLoading(){
+  modelLoading(0, 'assets/complete.obj');
+  modelLoading(1, 'assets/complete.obj');
+  modelLoading(2, 'assets/lively.obj');
+  modelLoading(3, 'assets/complete.obj');
+  modelLoading(4, 'assets/complete.obj');
+  modelLoading(5, 'assets/complete.obj');
+  modelLoading(6, 'assets/complete.obj');
+  modelLoading(7, 'assets/complete.obj');
+  modelLoading(8, 'assets/complete.obj');
+  modelLoading(9, 'assets/complete.obj');
+  modelLoading(10, 'assets/crescents.obj');
+  modelLoading(11, 'assets/maojiao.obj');
+  modelLoading(12, 'assets/complete.obj');
+  modelLoading(13, 'assets/complete.obj');
+  modelLoading(14, 'assets/complete.obj');
+  modelLoading(15, 'assets/newyear.obj');
+  modelLoading(16, 'assets/wish.obj');
+  modelLoading(17, 'assets/various.obj');
+  modelLoading(18, 'assets/language.obj');
+}
+
+
+function modelLoading(index, filename) {
+  loadModel(filename, modelLoaded);
+  function modelLoaded(model){
+    models[index] = model; // ---
+    symbols[index] = new Torus(contents[index], idnames[index], model);
+    loadCounter++;
+    // console.log(loadCounter, index);
+    if (loadCounter == 57) { // why not 38? / why setup running twice?
+      loading = false;
+    }
+  }
 }
 
 function setup() {
+    // imageLoading(0, 'images/large.jpeg');
+    // imageLoading(1, 'images/complete.jpeg');
+    // imageLoading(2, 'images/lively.jpeg');
+    // imageLoading(3, 'images/animism.jpeg');
+    // imageLoading(4, 'images/imagery.jpeg');
+    // imageLoading(5, 'images/doll.jpeg');
+    // imageLoading(6, 'images/doorgod.jpeg');
+    // imageLoading(7, 'images/tigers.jpeg');
+    // imageLoading(8, 'images/textures.jpeg');
+    // imageLoading(9, 'images/serrations.png');
+    // imageLoading(10, 'images/crescents.jpeg');
+    // imageLoading(11, 'images/maojiao.png');
+    // imageLoading(12, 'images/worship.jpeg');
+    // imageLoading(13, 'images/witchcraft.jpeg');
+    // imageLoading(14, 'images/zhuyou.jpeg');
+    // imageLoading(15, 'images/newyear.jpeg');
+    // imageLoading(16, 'images/wish.jpeg');
+    // imageLoading(17, 'images/various.jpeg');
+    // imageLoading(18, 'images/language.jpeg');
+
     createCanvas(windowWidth, windowHeight, WEBGL);
+    floorBuffer = createGraphics(1000, 1000);
     perspective(3*PI/7, width/height, 0.1, (height/2) / tan(PI/6)*10); //width/height?
     cursor('grab');
 
+    // to change
     for (var i = 0; i < contents.length; i++) { //contents.length
       contents[i].filter(INVERT);
       contents[i].filter(GRAY);
@@ -172,7 +271,7 @@ function setup() {
     //pattern
     size = 400;
     patternBuffer = createGraphics(400, 400);
-    r = 5;
+    r = 2;
     d = 25;
     theta = 0;
     bg_r = 180;
@@ -187,10 +286,14 @@ function setup() {
     patternBuffer.fill(rightColor);
     patternBuffer.ellipse(size / 2, size / 2, 2*bg_r, 2*bg_r);
 
+    // to change
     for (var i = 0; i < contents.length; i++) {
-      let newsym = new Torus(contents[i], idnames[i], models[i]); //to change
-      symbols.push(newsym)
+    let newsym = new Torus(contents[i], idnames[i], models[i]); //to change
+    symbols.push(newsym)
     }
+
+    particle = new Particle(cameraZ, 500-cameraX, floorBuffer);
+    console.log("setup running");
     // tB1 = createGraphics(200, 200);
     // tB2 = createGraphics(200, 200);
 
@@ -220,13 +323,46 @@ function setup() {
 }
 
 function draw() {
-    resizeCanvas(windowWidth, windowHeight, WEBGL);
-    drawMove();
-    drawContents();
-    drawFloor(); //to do
-    drawPattern();
+    // if (loading) {
+    //   drawLoading();
+    // }else if (scene == 0) {
+    //   let x = map(mouseX-width/2, -width/2+100, width/2-100, -200, 200, true);
+    //   let y = map(mouseY-height/2, -height/2+100, height/2-100, -100, 100, true);
+    //   camera(cameraX, cameraY, cameraZ, x, y, 0, 0, 1, 0);
+    //   drawIntro();
+    // }else if (scene == 1){
+      resizeCanvas(windowWidth, windowHeight, WEBGL);
+      drawMove();
+      drawContents();
+      drawFloor(); //to do
+      drawPattern();
+    // }
 
 }
+
+function drawLoading(){
+  background(220);
+  fill(255);
+  textAlign(CENTER, CENTER);
+  textSize(32);
+  textFont(myFont);
+  text("Loading...", 0, 0);
+}
+
+function drawIntro(){ // to change, add a button
+  background(0);
+  fill(255);
+  textAlign(CENTER, CENTER);
+  textSize(64);
+  textFont(myFont);
+  text("Press enter to start (temporary version)", 0, 0);
+}
+
+// function keyPressed(){
+//   if (keyCode===ENTER) {
+//     scene = 1;
+//   }
+// }
 
 //user perspective
 function drawMove() {
@@ -258,15 +394,18 @@ function drawMove() {
     // }
     delta_x = 0;
     delta_y = 0;
-    movespeed = map(abs(mouseX-width/2), 100, width/2-200, 0, 5, true)
+    movespeed = map(abs(mouseX-width/2), 100, width/2-200, 0.1, 3, true)
     if (mouseX < width/2) {
-      cameraX -= movespeed;
+      cameraX -= 0.5*movespeed;
     }else{
-      cameraX += movespeed;
+      cameraX += 0.5*movespeed;
+    }
+    if (mouseY > 4*height/5) {
+      delta_y = map(mouseY-4*height/5, 0, height/5, 0, cameraZ*2, true);
     }
   }
   if (cameraLock) {
-    if (mouseIsPressed) {
+    if (mouseIsPressed || keyIsPressed) {
       cameraLock = false;
     }
     delta_x = map(mouseX-width/2, -width/2+100, width/2-100, -200, 200, true);
@@ -279,14 +418,24 @@ function drawMove() {
   if (cameraX > maxX) {    // to change
     cameraX = maxX;
   }
-  cameraY = 15 * sin(frameCount / 30 + PI)
-  if (mouseIsPressed) {
-    cameraZ -= cspeed
-  }
-  if (keyIsPressed) {  // to change into zoom in/out
-    cameraZ += cspeed
-  }
+  cameraY = 8 * sin(frameCount / 30 + PI)
+  // if (mouseIsPressed) {
+  //   cameraZ -= cspeed
+  // }
+  // if (keyIsPressed) {  // to change into zoom in/out
+  //   cameraZ += cspeed
+  // }
   camera(cameraX, cameraY, cameraZ, delta_x, delta_y, -150, 0, 1, 0);
+}
+
+function mouseWheel(event) {
+  //console.log(event.delta);
+
+  // M:
+  // adjust the value.
+  // feel free to flip the direction!
+  let speed = event.delta * -0.1;
+  cameraZ += speed;
 }
 
 function drawContents() {
@@ -297,13 +446,6 @@ function drawContents() {
   // Contents on Display
   if (cameraZ >= 650) {
     if (cameraZ > 700) {
-      // push();
-      // translate(0,0,920);
-      // rotateZ(PI);
-      // normalMaterial();
-      // // texture(largetst);
-      // model(completeM);
-      // pop();
       contentsSetup(symbols[0], 0,0,900);
       contentsSetup(symbols[1], -100,0,800);
       contentsSetup(symbols[3], -80,0,700);
@@ -375,23 +517,28 @@ function drawContents() {
 function drawPattern() {
   let moved = sqrt(pow(cameraX-prevX,2)+pow(cameraZ-prevZ,2));
   // console.log(moved);
-  if (moved < 3 && r < 12){ // to change
+  if (moved < 1 && r < 12){ // to change
     if (!stopcheck) {
       timecheck = frameCount;
       stopcheck = true;
-      r += 0.2;
+      r += 0.01;
     } else {
-      if (frameCount - timecheck > 20) {
+      if (frameCount - timecheck > 80) {
         // cpairs.push(camtoPatt(cameraX, cameraZ));
-        r += 0.1;
+        r += 0.05;
+        particle.collect(cameraZ, cameraX);
+        colorChange = !colorChange;
+        stopcheck = false;
+      }else {
+        r += 0.01;
       }
     }
   }else if (r < 6){
     stopcheck = false;
-    r += 0.8;
+    r += 0.08;
   }else{
     stopcheck = false;
-    r = 0.8;
+    r = 1;
   }
   prevX = cameraX;
   prevZ = cameraZ;
@@ -409,7 +556,11 @@ function drawPattern() {
 
     patternBuffer.ellipseMode(CENTER);
     patternBuffer.noStroke();
-    patternBuffer.fill(0);
+    if (!colorChange) {
+      patternBuffer.fill(0);
+    }else{
+      patternBuffer.fill(190,10,10);
+    }
     patternBuffer.ellipse(x, y, r, r);
   }
   patternBuffer.pop();
@@ -502,51 +653,38 @@ function censym(xy, r, cp) {
 // }
 
 function drawFloor() {
+    floorBuffer.push();
+    floorBuffer.background(0);
+    floorBuffer.translate(0, 500);
+    floorBuffer.stroke(255, 169, 56);
+    floorBuffer.strokeWeight(5);
+    floorBuffer.noFill();
+    floorBuffer.arc(0, 0, 1800, 1800, -PI/6, PI/6, PIE); // 2000
+    floorBuffer.pop();
+
+    // if (requestAnimationFrame(drawFloor) % 3 == 0) {
+      particle.update(cameraZ-25, 500-cameraX);
+    // }
+    particle.show();
+
     push();
-    translate(0, 50, 900);
-    rotateY(PI/2);
+    translate(0, 80, 500);
+    rotateY(-PI/2);
     rotateX(PI/2);
-    stroke(255, 169, 56);
-    strokeWeight(3);
-    noFill();
-    arc(0, 0, 1900, 1900, -PI/6, PI/6, PIE);
+    texture(floorBuffer);
+    plane(1000);
+
     pop();
 
-    // moveBuffer.background(20);
-    // moveBuffer.stroke(255, 245, 153);
-    // stroke(200);
-    // strokeWeight(3);
+    // push();
+    // translate(0, 50, -60);
+    // rotateY(-PI/2);
+    // rotateX(PI/2);
+    // stroke(255, 169, 56);
+    // strokeWeight(1);
     // noFill();
-    // arc(originx, originy, fansize, fansize, -PI/12, PI/12, PIE);
-    //
-    // //position mapping
-    // fand = sqrt(pow(mouseX-originx,2)+pow((mouseY-size)-originy,2));
-    // fantheta = atan2((mouseY-size)-originy, mouseX-originx); // +- 1/12PI
-    // if (fand < 0){
-    //   fand = 0;
-    // }
-    // if (fand > fansize / 2){
-    //   fand = fansize / 2;
-    // }
-    // if (fantheta < -PI/12){
-    //   fantheta = -PI/12;
-    // }
-    // if (fantheta > PI/12){
-    //   fantheta = PI/12;
-    // }
-    // if (frameCount % 3 == 0){
-    //   particle.update(originx+fand * cos(fantheta), originy+fand * sin(fantheta));
-    // }
-    // particle.show();
-    // // moveBuffer.push();
-    // // moveBuffer.noStroke();
-    // // moveBuffer.fill(255, 245, 153);
-    // // moveBuffer.circle(originx+fand * cos(fantheta), originy+fand * sin(fantheta), 10);
-    // // moveBuffer.pop();
-    // let fand_ = map(fand, 0, fansize/2, 0, size);
-    // let fantheta_ = map(fantheta, -PI/12, PI/12, 0, PI/2);
-    // xpos = fand_ * cos(fantheta_);
-    // ypos = fand_ * sin(fantheta_);
+    // arc(0, 0, 1900, 1900, -PI/6, PI/6, PIE);
+    // pop();
 
 }
 
