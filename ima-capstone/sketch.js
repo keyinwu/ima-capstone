@@ -24,7 +24,8 @@ let cameraX = 0;
 let cameraY = 0;
 let cameraZ = 1000;
 let startZ = 1000;
-let maxX = 200;
+let maxX0 = 250;
+let maxX;
 let delta_x = 0;
 let delta_y = 0;
 let xangle = 0;
@@ -86,7 +87,7 @@ let symbols=[];
 
 // to finish
 let symtex;
-let completeM,model1,model2,model3,model5,model6;
+let largeM, completeM, livelyM, animismM, imageryM, dollM, doorgodM, tigersM, texturesM, serrationsM, crescentsM, maojiaoM, worshipM, witchcraftM, zhuyouM, newyearM, wishM, variousM, languageM;
 let models=[];
 
 //leftBuffer
@@ -127,12 +128,12 @@ let colorChange = false;
 let timecheck;
 let stopcheck = false;
 
-let totalAssets = 26;
+let totalAssets = 39; // 40 - 1
 let assetArray = [];
 
 function updateLoadingBar(asset) {
   assetArray.push(asset);
-  console.log(assetArray.length);
+  // console.log(assetArray.length);
 
   let bar = document.getElementById("loadingbar");
   bar.style.width = floor(100 * assetArray.length / totalAssets) + "%";
@@ -140,7 +141,18 @@ function updateLoadingBar(asset) {
   if (assetArray.length == totalAssets) {
     let barContainer = document.getElementById("loadingbar-container");
     barContainer.style.display = "none";
+    // loading = false;
   }
+
+  if (asset instanceof p5.Image) {
+    asset.filter(INVERT);
+    asset.filter(GRAY);
+    // contents[index] = asset;
+  }
+  // if (asset instanceof p5.Geometry) {
+  //   models[index] = asset; // ---
+  //   symbols[index] = new Torus(idnames[index], asset);
+  // }
 }
 
 function preload(){
@@ -150,7 +162,6 @@ function preload(){
   lively = loadImage('images/lively.jpeg', updateLoadingBar);
   animism = loadImage('images/animism.jpeg', updateLoadingBar);
   imagery = loadImage('images/imagery.jpeg', updateLoadingBar);
-  // folk = loadImage('images/folk.jpeg', updateLoadingBar);
   doll = loadImage('images/doll.jpeg', updateLoadingBar);
   doorgod = loadImage('images/doorgod.jpeg', updateLoadingBar);
   tigers = loadImage('images/tigers.jpeg', updateLoadingBar);
@@ -166,107 +177,47 @@ function preload(){
   various = loadImage('images/various.jpeg', updateLoadingBar);
   language = loadImage('images/language.jpeg', updateLoadingBar);
 
-  //folk removed
-  contents = [large, complete, lively, animism, imagery, doll, doorgod, tigers, textures, serrations, crescents, maojiao, worship, witchcraft, zhuyou, newyear, wish, various, language];
-  idnames = ["large", "complete", "lively", "animism", "imagery", "doll", "doorgod", "tigers", "textures", "serrations", "crescents", "maojiao", "worship", "witchcraft", "zhuyou", "newyear", "wish", "various", "language"];
+  symtex = loadImage('images/texture4.jpeg');
+  // loading models
+  largeM = loadModel('assets/large.obj', updateLoadingBar);
+  completeM = loadModel('assets/complete.obj', updateLoadingBar);
+  livelyM = loadModel('assets/lively.obj', updateLoadingBar);
+  animismM = loadModel('assets/animism.obj', updateLoadingBar);
+  imageryM = loadModel('assets/imagery.obj', updateLoadingBar);
+  dollM = loadModel('assets/doll.obj', updateLoadingBar);
+  doorgodM = loadModel('assets/doorgod.obj', updateLoadingBar);
+  tigersM = loadModel('assets/complete.obj', updateLoadingBar); // -----
+  texturesM = loadModel('assets/complete.obj', updateLoadingBar);  // -----
+  serrationsM = loadModel('assets/serrations.obj', updateLoadingBar);
+  crescentsM = loadModel('assets/crescents.obj', updateLoadingBar);
+  maojiaoM = loadModel('assets/maojiao.obj', updateLoadingBar);
+  worshipM = loadModel('assets/complete.obj', updateLoadingBar); // -----
+  witchcraftM = loadModel('assets/witchcraft.obj', updateLoadingBar);
+  zhuyouM = loadModel('assets/complete.obj', updateLoadingBar); // -----
+  newyearM = loadModel('assets/newyear.obj', updateLoadingBar);
+  wishM = loadModel('assets/wish.obj', updateLoadingBar);
+  variousM = loadModel('assets/various.obj', updateLoadingBar);
+  languageM = loadModel('assets/language.obj', updateLoadingBar);
 
-  // to change
-  symtex = loadImage('images/texture4.jpeg', updateLoadingBar);
-  completeM = loadModel('assets/lively.obj', updateLoadingBar);
-  model1 = loadModel('assets/complete.obj', updateLoadingBar);
-  model2 = loadModel('assets/lively.obj', updateLoadingBar);
-  model3 = loadModel('assets/crescents.obj', updateLoadingBar);
-  model5 = loadModel('assets/wish.obj', updateLoadingBar);
-  model6 = loadModel('assets/language.obj', updateLoadingBar);
-
-  models = [completeM, model1, model2, model3, model6, model5, model6, completeM, model2, model1, completeM, completeM, completeM, completeM, completeM, completeM, completeM, completeM, completeM];
-
-  // symtex = loadImage('images/texture4.jpeg');
-  // myFont = loadFont('fonts/Inconsolata-Medium.ttf');
+  myFont = loadFont('fonts/Inconsolata-Medium.ttf', updateLoadingBar);
  }
 
-function imageLoading(index, filename) {
-  loadImage(filename, imageLoaded);
-  function imageLoaded(img){
-    img.filter(INVERT);
-    img.filter(GRAY);
-    contents[index] = img;
-    loadCounter++;
-    // console.log(loadCounter, index, filename);
-    if (loadCounter == 19) {
-      console.log("loading models...");
-      startModelLoading();
-    }
-  }
-}
-
-function startModelLoading(){
-  modelLoading(0, 'assets/complete.obj');
-  modelLoading(1, 'assets/complete.obj');
-  modelLoading(2, 'assets/lively.obj');
-  modelLoading(3, 'assets/complete.obj');
-  modelLoading(4, 'assets/complete.obj');
-  modelLoading(5, 'assets/complete.obj');
-  modelLoading(6, 'assets/complete.obj');
-  modelLoading(7, 'assets/complete.obj');
-  modelLoading(8, 'assets/complete.obj');
-  modelLoading(9, 'assets/complete.obj');
-  modelLoading(10, 'assets/crescents.obj');
-  modelLoading(11, 'assets/maojiao.obj');
-  modelLoading(12, 'assets/complete.obj');
-  modelLoading(13, 'assets/complete.obj');
-  modelLoading(14, 'assets/complete.obj');
-  modelLoading(15, 'assets/newyear.obj');
-  modelLoading(16, 'assets/wish.obj');
-  modelLoading(17, 'assets/various.obj');
-  modelLoading(18, 'assets/language.obj');
-}
-
-
-function modelLoading(index, filename) {
-  loadModel(filename, modelLoaded);
-  function modelLoaded(model){
-    models[index] = model; // ---
-    symbols[index] = new Torus(contents[index], idnames[index], model);
-    loadCounter++;
-    // console.log(loadCounter, index);
-    if (loadCounter == 57) { // why not 38? / why setup running twice?
-      loading = false;
-    }
-  }
-}
 
 function setup() {
-    // imageLoading(0, 'images/large.jpeg');
-    // imageLoading(1, 'images/complete.jpeg');
-    // imageLoading(2, 'images/lively.jpeg');
-    // imageLoading(3, 'images/animism.jpeg');
-    // imageLoading(4, 'images/imagery.jpeg');
-    // imageLoading(5, 'images/doll.jpeg');
-    // imageLoading(6, 'images/doorgod.jpeg');
-    // imageLoading(7, 'images/tigers.jpeg');
-    // imageLoading(8, 'images/textures.jpeg');
-    // imageLoading(9, 'images/serrations.png');
-    // imageLoading(10, 'images/crescents.jpeg');
-    // imageLoading(11, 'images/maojiao.png');
-    // imageLoading(12, 'images/worship.jpeg');
-    // imageLoading(13, 'images/witchcraft.jpeg');
-    // imageLoading(14, 'images/zhuyou.jpeg');
-    // imageLoading(15, 'images/newyear.jpeg');
-    // imageLoading(16, 'images/wish.jpeg');
-    // imageLoading(17, 'images/various.jpeg');
-    // imageLoading(18, 'images/language.jpeg');
+    //folk removed
+    contents = [large, complete, lively, animism, imagery, doll, doorgod, tigers, textures, serrations, crescents, maojiao, worship, witchcraft, zhuyou, newyear, wish, various, language];
+    idnames = ["large", "complete", "lively", "animism", "imagery", "doll", "doorgod", "tigers", "textures", "serrations", "crescents", "maojiao", "worship", "witchcraft", "zhuyou", "newyear", "wish", "various", "language"];
+    models = [largeM, completeM, livelyM, animismM, imageryM, dollM, doorgodM, tigersM, texturesM, serrationsM, crescentsM, maojiaoM, worshipM, witchcraftM, zhuyouM, newyearM, wishM, variousM, languageM];
+
+    for (var i = 0; i < contents.length; i++) {
+      let newsym = new Torus(contents[i], idnames[i], models[i]); //to change
+      symbols.push(newsym)
+    }
 
     createCanvas(windowWidth, windowHeight, WEBGL);
     floorBuffer = createGraphics(1000, 1000);
     perspective(3*PI/7, width/height, 0.1, (height/2) / tan(PI/6)*10); //width/height?
     cursor('grab');
-
-    // to change
-    for (var i = 0; i < contents.length; i++) { //contents.length
-      contents[i].filter(INVERT);
-      contents[i].filter(GRAY);
-    }
 
     //pattern
     size = 400;
@@ -286,14 +237,8 @@ function setup() {
     patternBuffer.fill(rightColor);
     patternBuffer.ellipse(size / 2, size / 2, 2*bg_r, 2*bg_r);
 
-    // to change
-    for (var i = 0; i < contents.length; i++) {
-    let newsym = new Torus(contents[i], idnames[i], models[i]); //to change
-    symbols.push(newsym)
-    }
-
     particle = new Particle(cameraZ, 500-cameraX, floorBuffer);
-    console.log("setup running");
+    // console.log("setup running");
     // tB1 = createGraphics(200, 200);
     // tB2 = createGraphics(200, 200);
 
@@ -323,20 +268,18 @@ function setup() {
 }
 
 function draw() {
-    // if (loading) {
-    //   drawLoading();
-    // }else if (scene == 0) {
-    //   let x = map(mouseX-width/2, -width/2+100, width/2-100, -200, 200, true);
-    //   let y = map(mouseY-height/2, -height/2+100, height/2-100, -100, 100, true);
-    //   camera(cameraX, cameraY, cameraZ, x, y, 0, 0, 1, 0);
-    //   drawIntro();
-    // }else if (scene == 1){
+    if (scene == 0) {
+      let x = map(mouseX-width/2, -width/2+100, width/2-100, -200, 200, true);
+      let y = map(mouseY-height/2, -height/2+100, height/2-100, -100, 100, true);
+      camera(cameraX, cameraY, cameraZ, x, y, 0, 0, 1, 0);
+      drawIntro();
+    }else if (scene == 1){
       resizeCanvas(windowWidth, windowHeight, WEBGL);
       drawMove();
       drawContents();
       drawFloor(); //to do
       drawPattern();
-    // }
+    }
 
 }
 
@@ -358,11 +301,11 @@ function drawIntro(){ // to change, add a button
   text("Press enter to start (temporary version)", 0, 0);
 }
 
-// function keyPressed(){
-//   if (keyCode===ENTER) {
-//     scene = 1;
-//   }
-// }
+function keyPressed(){
+  if (keyCode===ENTER) {
+    scene = 1;
+  }
+}
 
 //user perspective
 function drawMove() {
@@ -392,9 +335,14 @@ function drawMove() {
     // }else if (delta_y < 0) {
     //   delta_y++;
     // }
+    maxX = cameraZ*tan(atan2(maxX0, startZ));
     delta_x = 0;
     delta_y = 0;
-    movespeed = map(abs(mouseX-width/2), 100, width/2-200, 0.1, 3, true)
+    if (abs(mouseX-width/2) < 200) {
+      movespeed = map(abs(mouseX-width/2), 5, 200, 0.05, 0.5, true)
+    }else {
+      movespeed = map(abs(mouseX-width/2), 100, width/2-200, 0.5, 3, true)
+    }
     if (mouseX < width/2) {
       cameraX -= 0.5*movespeed;
     }else{
@@ -405,9 +353,9 @@ function drawMove() {
     }
   }
   if (cameraLock) {
-    if (mouseIsPressed || keyIsPressed) {
-      cameraLock = false;
-    }
+    // if (mouseIsPressed || keyIsPressed) {
+    //   cameraLock = false;
+    // }
     delta_x = map(mouseX-width/2, -width/2+100, width/2-100, -200, 200, true);
     delta_y = map(mouseY-height/2, -height/2+100, height/2-100, -100, 100, true);
   }
@@ -430,7 +378,7 @@ function drawMove() {
 
 function mouseWheel(event) {
   //console.log(event.delta);
-
+  cameraLock = false;
   // M:
   // adjust the value.
   // feel free to flip the direction!
@@ -447,29 +395,29 @@ function drawContents() {
   if (cameraZ >= 650) {
     if (cameraZ > 700) {
       contentsSetup(symbols[0], 0,0,900);
-      contentsSetup(symbols[1], -100,0,800);
-      contentsSetup(symbols[3], -80,0,700);
-      contentsSetup(symbols[4], 80,0,700);
-      contentsSetup(symbols[2], 100,0,800);
+      contentsSetup(symbols[1], -230,0,800);
+      contentsSetup(symbols[3], -170,0,700);
+      contentsSetup(symbols[4], 170,0,700);
+      contentsSetup(symbols[2], 230,0,800);
     }
-    contentsSetup(symbols[5], -90,0,600);
-    contentsSetup(symbols[6], 0,0,600);
-    contentsSetup(symbols[7], 90,0,600);
+    contentsSetup(symbols[5], -110,0,600);
+    contentsSetup(symbols[6], 0,0,680);
+    contentsSetup(symbols[7], 110,0,600);
 
   }
   if (cameraZ < 650 && cameraZ >= 450) {
-    contentsSetup(symbols[8], -85,0,500);
-    contentsSetup(symbols[9], -45,0,400);
-    contentsSetup(symbols[10], 45,0,400);
-    contentsSetup(symbols[11], 85,0,500);
+    contentsSetup(symbols[8], -110,0,500);
+    contentsSetup(symbols[9], -55,0,400);
+    contentsSetup(symbols[10], 55,0,400);
+    contentsSetup(symbols[11], 110,0,500);
 
   }
   if (cameraZ < 450 && cameraZ >= 250) {
-    contentsSetup(symbols[12], -60,0,300);
+    contentsSetup(symbols[12], -100,0,300);
     contentsSetup(symbols[13], 0,0,300);
-    contentsSetup(symbols[14], 60,0,300);
-    contentsSetup(symbols[15], -40,0,200);
-    contentsSetup(symbols[16], 40,0,200);
+    contentsSetup(symbols[14], 100,0,300);
+    contentsSetup(symbols[15], -60,0,200);
+    contentsSetup(symbols[16], 60,0,200);
   }
   if (cameraZ < 250 && cameraZ >= 50) {
     contentsSetup(symbols[17], 0,0,100);
