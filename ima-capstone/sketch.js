@@ -222,6 +222,8 @@ function setup() {
     //pattern
     size = 400;
     patternBuffer = createGraphics(400, 400);
+    patternBuffer.pixelDensity(3);
+
     r = 2;
     d = 25;
     theta = 0;
@@ -304,6 +306,11 @@ function drawIntro(){ // to change, add a button
 function keyPressed(){
   if (keyCode===ENTER) {
     scene = 1;
+  }
+  // UP_ARROW
+  if (keyCode===32) {
+    // saveCanvas(patternBuffer, "TCT_pattern", "jpg")
+    patternBuffer.save("save.jpg")
   }
 }
 
