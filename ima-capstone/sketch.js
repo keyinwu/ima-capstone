@@ -208,7 +208,7 @@ function preload(){
   languageM = loadModel('assets/language.obj', updateLoadingBar);
   variousM = loadModel('assets/various.obj', updateLoadingBar);
 
-  myFont = loadFont('./fonts/Inconsolata-Medium.ttf', updateLoadingBar);
+  myFont = loadFont('font/Inconsolata-Medium.ttf', updateLoadingBar);
  }
 
 
