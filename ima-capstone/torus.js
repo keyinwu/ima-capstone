@@ -14,6 +14,9 @@ class Torus {
     this.alpha = 0;
     this.opacity = 0;
     this.cameraL = false;
+    this.scroll = false;
+    this.enter = false;
+    this.preenter = false;
   }
 
   update(x, z, camX, camZ) {
@@ -22,36 +25,66 @@ class Torus {
     this.camX = camX;
     this.camZ = camZ;
     let dis = sqrt(pow(this.camX-this.x,2)+pow(this.camZ-this.z,2));
-    //trigger flame
     // if (dis < 90 && this.camZ - this.z > 60) {
     if (this.camX-this.x < 40 && this.camX-this.x > -40 && this.camZ - this.z < 90 && this.camZ - this.z > 60) {
-      // console.log("yes");
-      this.cameraL = true;
-      // push();
-      // texture(this.buffer);
-      // fill(200, 10, 10);
-      // sphere(this.r/5, 24, 24); //change after adjusting camera
-      // pop();
-      // document.getElementById(this.id).style.display = "block"; // to normalize
-      // console.log(document.getElementById(this.id).style.opacity);
-      this.fadein(this.id);
-      if (this.alpha < 255) {
-        this.alpha += 20;
+      this.enter = true;
+      if (this.alpha < 255 || this.opacity < 1) {
+        this.enterin();
       }
-      // console.log(this.alpha);
       this.view(this.buffer, this.alpha);
     }
     else{
-      this.alpha = 0;
-      this.cameraL = false;
-      this.fadeout(this.id);
-      // if (this.alpha > 0) {
-      //   this.alpha -= 2;
-      //   this.view(this.buffer, this.alpha);
-      // }
+      this.enter = false;
       this.show();
-      // document.getElementById(this.id).style.display = "none"; // to normalize
     }
+
+    //only excute when the status changes
+    if (this.enter != this.preenter) {
+      if (this.enter) {
+        this.enterin();
+      }
+      else {
+        this.leaveaway();
+      }
+    }
+    this.preenter = this.enter;
+  }
+
+  enterin(){
+    // console.log("yes");
+    this.cameraL = true;
+    this.scroll = true;
+    if (this.alpha < 255) {
+      this.alpha += 20;
+    }
+    if (this.opacity < 1) {
+      this.opacity += 0.05;
+    }
+    document.getElementById(this.id).style.display = "block";
+    document.getElementById(this.id).style.opacity = this.opacity;
+    document.getElementById("m_scroll").style.display = "block";
+  }
+
+  leaveaway(){
+    this.alpha = 0;
+    this.cameraL = false;
+    this.scroll = false;
+    // if (this.opacity > 0) {
+    //   this.opacity -= 0.1;
+    // }
+    document.getElementById(this.id).style.opacity = 0;
+    // if (this.opacity <= 1) {
+    document.getElementById(this.id).style.display = "none";
+    // }
+    document.getElementById(this.id+"-1").style.display = "none";
+    document.getElementById(this.id+"-2").style.display = "none";
+    // this.fadeout("m_scroll");
+    // if (this.alpha > 0) {
+    //   this.alpha -= 2;
+    //   this.view(this.buffer, this.alpha);
+    // }
+
+    // document.getElementById(this.id).style.display = "none"; // to normalize
   }
 
   show() {
@@ -74,6 +107,14 @@ class Torus {
     return this.cameraL;
   }
 
+  isScroll() {
+    if (this.scroll) {
+      return this.id;
+    }else {
+      return null;
+    }
+  }
+
   view(cbuffer, alpha) {
     cbuffer.push();
     cbuffer.background(0);
@@ -90,23 +131,6 @@ class Torus {
     pop();
   }
 
-  fadein(id){
-    document.getElementById(id).style.display = "block";
-    if (this.opacity < 1) {
-      this.opacity += 0.1;
-    }
-    document.getElementById(id).style.opacity = this.opacity;
-  }
-
-  fadeout(id){
-    if (this.opacity > 0) {
-      this.opacity -= 0.1;
-    }
-    document.getElementById(id).style.opacity = this.opacity;
-    if (this.opacity <= 1) {
-      document.getElementById(id).style.display = "none";
-    }
-  }
 
   logging(){
     console.log(this.camX-this.x, this.camZ - this.z);

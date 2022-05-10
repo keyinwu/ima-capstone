@@ -2,15 +2,21 @@ html, body {
   margin: 0;
   padding: 0;
   background-color: black;
+  height: 100%;
+  width: 100%;
 }
 canvas {
   display: block;
   vertical-align: top;
+  height: 100%;
+  width: 100%;
 }
 
 div.container-fluid {
   position: absolute;
   color: orange;
+  height: 100%;
+  width: 100%;
   /* border-radius: 15px; */
 }
 
@@ -18,19 +24,40 @@ div.row {
   /* background-color: rgb(255, 255, 255, 0.3); */
 }
 
+div.layout-space {
+  font-size: 5rem;
+  text-align: center;
+  /* height: 100%; */
+  position: relative;
+  /* padding-top: 10%; */
+  height: 40%;
+}
+
 div.pc-title {
   font-size: 5rem;
   text-align: center;
+  /* height: 100%; */
+  position: sticky;
+  top: 0;
+  /* left: 50%; */
+  /* top: 30%; */
+}
+
+div.pc-chi {
+  line-height: 2.5;
 }
 
 div.pc-content {
-  font-size: 2rem;
+  font-size: 1.5rem;
   text-align: left;
+  display: none;
 }
 
 #large, #complete, #lively, #animism, #imagery, #folk, #doll, #doorgod, #tigers, #textures, #serrations, #crescents, #maojiao, #worship, #witchcraft, #zhuyou, #newyear, #wish, #various, #language {
   display: none;
   opacity: 0;
+  height: 100%;
+  width: 100%;
 }
 
 /* not working */
@@ -42,7 +69,24 @@ div.pc-content {
    font-weight: 600;
 }
 
-div#loadingbar-container {
+div#prog-container {
+  background-color: rgb(94, 64, 93);
+  width: 65%;
+  height: 30px;
+  padding: 2px;
+
+  z-index: 10;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+div#progbar {
+  background-color: rgb(230, 159, 53);
+}
+
+/* div#loadingbar-container {
   background-color: rgb(94, 64, 93);
   width: 60%;
   height: 50px;
@@ -59,4 +103,74 @@ div#loadingbar {
   background-color: rgb(230, 159, 53);
   width: 100%;
   height: 100%;
+} */
+
+
+
+*, *:before, *:after {
+  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+ }
+
+
+.mouse_scroll {
+	display: none;
+	margin: 0 auto;
+	width: 24px;
+	height: 100px;
+	margin-top: 125px;
+
+  z-index: 10;
+  position: fixed;
+  left: 50%;
+  top: 70%;
+  transform: translate(-50%, -50%);
+}
+
+
+.m_scroll_arrows
+{
+  display: block;
+  width: 5px;
+  height: 5px;
+  -ms-transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+
+  border-right: 3px solid #b58c2e;
+  border-bottom: 3px solid #b58c2e;
+  margin: 0 0 3px 4px;
+
+  width: 32px;
+  height: 32px;
+}
+
+
+.trei
+{
+    -webkit-animation: mouse-scroll 1s infinite;
+    -moz-animation: mouse-scroll 1s infinite;
+    animation: mouse-scroll 1s infinite;
+
+}
+
+
+.trei
+{
+  -webkit-animation-delay: .3s;
+  -moz-animation-delay: .3s;
+  -webkit-animation-direction: alternate;
+
+  animation-delay: .3s;
+  animation-direction: alternate;
+
+
+  margin-top: -6px;
+}
+
+
+@keyframes mouse-scroll {
+
+  0%   { opacity: 0; }
+  50%  { opacity: .5; }
+  100% { opacity: 1; }
 }

@@ -27,7 +27,7 @@ class Particle {
   collect(newx, newy){
     let v = createVector(this.x, this.y);
     this.collection.push(v);
-    console.log(this.collection);
+    // console.log(this.collection);
   }
 
   //trace animation

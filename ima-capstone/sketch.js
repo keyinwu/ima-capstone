@@ -26,6 +26,8 @@ let cameraZ = 1000;
 let startZ = 1000;
 let maxX0 = 250;
 let maxX;
+let maxZ = 1000;
+let minZ = -100;
 let delta_x = 0;
 let delta_y = 0;
 let xangle = 0;
@@ -84,6 +86,7 @@ let idnames= ["large","complete","lively","animism","imagery","doll","doorgod","
 // let buffers = [completeBuffer,livelyBuffer,animismBuffer,imageryBuffer,folkBuffer,dollBuffer,doorgodBuffer,tigersBuffer,texturesBuffer,serrationsBuffer,crescentsBuffer,maojiaoBuffer,worshipBuffer,witchcraftBuffer,zhuyouBuffer,newyearBuffer,wishBuffer,variousBuffer,languageBuffer]
 
 let symbols=[];
+let scrolled;
 
 // to finish
 let symtex;
@@ -135,13 +138,19 @@ function updateLoadingBar(asset) {
   assetArray.push(asset);
   // console.log(assetArray.length);
 
-  let bar = document.getElementById("loadingbar");
-  bar.style.width = floor(100 * assetArray.length / totalAssets) + "%";
+  let prog = document.getElementById("progbar");
+  // console.log(prog.ariaValueNow);
+  prog.ariaValueNow = int(100 * assetArray.length / totalAssets);
+  prog.style.width = floor(100 * assetArray.length / totalAssets) + "%";
+
+  // let bar = document.getElementById("loadingbar");
+  // bar.style.width = floor(100 * assetArray.length / totalAssets) + "%";
 
   if (assetArray.length == totalAssets) {
-    let barContainer = document.getElementById("loadingbar-container");
-    barContainer.style.display = "none";
-    // loading = false;
+    // let barContainer = document.getElementById("loadingbar-container");
+    // barContainer.style.display = "none";
+    let progContainer = document.getElementById("prog-container");
+    progContainer.style.display = "none";
   }
 
   if (asset instanceof p5.Image) {
@@ -174,8 +183,8 @@ function preload(){
   zhuyou = loadImage('images/zhuyou.jpeg', updateLoadingBar);
   newyear = loadImage('images/newyear.jpeg', updateLoadingBar);
   wish = loadImage('images/wish.jpeg', updateLoadingBar);
-  various = loadImage('images/various.jpeg', updateLoadingBar);
   language = loadImage('images/language.jpeg', updateLoadingBar);
+  various = loadImage('images/various.jpeg', updateLoadingBar);
 
   symtex = loadImage('images/texture4.jpeg');
   // loading models
@@ -196,8 +205,8 @@ function preload(){
   zhuyouM = loadModel('assets/complete.obj', updateLoadingBar); // -----
   newyearM = loadModel('assets/newyear.obj', updateLoadingBar);
   wishM = loadModel('assets/wish.obj', updateLoadingBar);
-  variousM = loadModel('assets/various.obj', updateLoadingBar);
   languageM = loadModel('assets/language.obj', updateLoadingBar);
+  variousM = loadModel('assets/various.obj', updateLoadingBar);
 
   myFont = loadFont('fonts/Inconsolata-Medium.ttf', updateLoadingBar);
  }
@@ -205,11 +214,11 @@ function preload(){
 
 function setup() {
     //folk removed
-    contents = [large, complete, lively, animism, imagery, doll, doorgod, tigers, textures, serrations, crescents, maojiao, worship, witchcraft, zhuyou, newyear, wish, various, language];
-    idnames = ["large", "complete", "lively", "animism", "imagery", "doll", "doorgod", "tigers", "textures", "serrations", "crescents", "maojiao", "worship", "witchcraft", "zhuyou", "newyear", "wish", "various", "language"];
-    models = [largeM, completeM, livelyM, animismM, imageryM, dollM, doorgodM, tigersM, texturesM, serrationsM, crescentsM, maojiaoM, worshipM, witchcraftM, zhuyouM, newyearM, wishM, variousM, languageM];
+    contents = [large, complete, lively, animism, imagery, doll, doorgod, tigers, textures, serrations, crescents, maojiao, worship, witchcraft, zhuyou, newyear, wish, language, various];
+    idnames = ["large", "complete", "lively", "animism", "imagery", "doll", "doorgod", "tigers", "textures", "serrations", "crescents", "maojiao", "worship", "witchcraft", "zhuyou", "newyear", "wish", "language", "various"];
+    models = [largeM, completeM, livelyM, animismM, imageryM, dollM, doorgodM, tigersM, texturesM, serrationsM, crescentsM, maojiaoM, worshipM, witchcraftM, zhuyouM, newyearM, wishM, languageM, variousM];
 
-    for (var i = 0; i < contents.length; i++) {
+    for (let i = 0; i < contents.length; i++) {
       let newsym = new Torus(contents[i], idnames[i], models[i]); //to change
       symbols.push(newsym)
     }
@@ -222,7 +231,7 @@ function setup() {
     //pattern
     size = 400;
     patternBuffer = createGraphics(400, 400);
-    patternBuffer.pixelDensity(3);
+    patternBuffer.pixelDensity(2); // change to 3
 
     r = 2;
     d = 25;
@@ -285,14 +294,14 @@ function draw() {
 
 }
 
-function drawLoading(){
-  background(220);
-  fill(255);
-  textAlign(CENTER, CENTER);
-  textSize(32);
-  textFont(myFont);
-  text("Loading...", 0, 0);
-}
+// function drawLoading(){
+//   background(220);
+//   fill(255);
+//   textAlign(CENTER, CENTER);
+//   textSize(32);
+//   textFont(myFont);
+//   text("Loading...", 0, 0);
+// }
 
 function drawIntro(){ // to change, add a button
   background(0);
@@ -308,9 +317,9 @@ function keyPressed(){
     scene = 1;
   }
   // UP_ARROW
-  if (keyCode===32) {
+  if (keyCode===32) { //&& cameraZ < xx
     // saveCanvas(patternBuffer, "TCT_pattern", "jpg")
-    patternBuffer.save("save.jpg")
+    patternBuffer.save("pattern.jpg")
   }
 }
 
@@ -332,6 +341,7 @@ function drawMove() {
   // version 2
   // console.log(cameraLock);
   if (!cameraLock) {
+    document.getElementById("m_scroll").style.display = "none";
     // if (delta_x > 0) {
     //   delta_x--;
     // }else if (delta_x < 0) {
@@ -360,9 +370,6 @@ function drawMove() {
     }
   }
   if (cameraLock) {
-    // if (mouseIsPressed || keyIsPressed) {
-    //   cameraLock = false;
-    // }
     delta_x = map(mouseX-width/2, -width/2+100, width/2-100, -200, 200, true);
     delta_y = map(mouseY-height/2, -height/2+100, height/2-100, -100, 100, true);
   }
@@ -373,24 +380,35 @@ function drawMove() {
   if (cameraX > maxX) {    // to change
     cameraX = maxX;
   }
+
   cameraY = 8 * sin(frameCount / 30 + PI)
-  // if (mouseIsPressed) {
-  //   cameraZ -= cspeed
-  // }
-  // if (keyIsPressed) {  // to change into zoom in/out
-  //   cameraZ += cspeed
-  // }
+  if (mouseIsPressed) {
+    cameraLock = false;
+    if (mouseY < 2*height/3 && cameraZ >= minZ) {
+      cameraZ -= cspeed
+    }
+    if (mouseY > 2*height/3 && cameraZ <= maxZ) {
+      cameraZ += cspeed
+    }
+  }
   camera(cameraX, cameraY, cameraZ, delta_x, delta_y, -150, 0, 1, 0);
 }
 
 function mouseWheel(event) {
+  // console.log(scrolled);
+  if (scrolled) {
+    document.getElementById(scrolled+"-1").style.display = "block";
+    document.getElementById(scrolled+"-2").style.display = "block";
+    document.getElementById("m_scroll").style.display = "none";
+    scrolled = null;
+  }
   //console.log(event.delta);
-  cameraLock = false;
+  // cameraLock = false;
   // M:
   // adjust the value.
   // feel free to flip the direction!
-  let speed = event.delta * -0.1;
-  cameraZ += speed;
+  // let speed = event.delta * -0.1;
+  // cameraZ += speed;
 }
 
 function drawContents() {
@@ -495,11 +513,14 @@ function drawPattern() {
     stopcheck = false;
     r = 1;
   }
-  prevX = cameraX;
-  prevZ = cameraZ;
+  //lerp
+  prevX = lerp(prevX, cameraX, 0.5);
+  prevZ = lerp(prevZ, cameraZ, 0.5);
 
-  d = map(cameraZ, 0, startZ, 0, bg_r);
-  theta = map(atan2(cameraX, cameraZ), -atan2(maxX, startZ), atan2(maxX, startZ), -PI/12, PI/12, true);
+  d = map(prevZ, 0, startZ, 0, bg_r);
+  theta = map(atan2(prevX, prevZ), -atan2(maxX, startZ), atan2(maxX, startZ), -PI/12, PI/12, true);
+  // d = map(cameraZ, 0, startZ, 0, bg_r);
+  // theta = map(atan2(cameraX, cameraZ), -atan2(maxX, startZ), atan2(maxX, startZ), -PI/12, PI/12, true);
 
   // version 1
   patternBuffer.push();
@@ -537,10 +558,11 @@ function contentsSetup(symbol, cx, cy, cz, logging=false) {
   translate(cx, cy, cz);
   translate(0,10,10);
   symbol.update(cx, cz+10, cameraX, cameraZ);
-  if (logging) { // for debug
+  if (logging) { // for debugging
     symbol.logging();
   }
   cameraLock = cameraLock || symbol.isLock();
+  scrolled = scrolled || symbol.isScroll();
   pop();
 }
 
@@ -571,41 +593,6 @@ function censym(xy, r, cp) {
     censym(xy, r, cp);
   }
 }
-
-// function drawRightBuffer() {
-//     // rightBuffer.textSize(32);
-//     // rightBuffer.text("This is the right buffer!", 50, 50);
-//
-//     //3D Pattern
-//     let moved = sqrt(pow(xpos-last_x,2)+pow(ypos-last_y,2));
-//     if (moved < 4 && r < 10){
-//       r += 0.3;
-//     }else if (r < 2){
-//       r += 0.1;
-//     }else{
-//       r = 0.5;
-//     }
-//     last_x = xpos;
-//     last_y = ypos;
-//
-//     d = map(sqrt(pow(xpos,2)+pow(ypos,2)), 0, size, 0, bg_r);
-//     theta = map(atan2(ypos, xpos), 0, PI/2, 0, PI/6);
-//
-//     rightBuffer.push();
-//     rightBuffer.translate(size / 2, size / 2);
-//     rightBuffer.rotate(PI * millis() / 10.0 / 2500); //3.0
-//     for (let j = 0; j < 12; j++) {
-//       let x = d * cos(theta+j*PI/6);
-//       let y = d * sin(theta+j*PI/6);
-//
-//       rightBuffer.ellipseMode(CENTER);
-//       rightBuffer.noStroke();
-//       rightBuffer.fill(0);
-//       rightBuffer.ellipse(x, y, r, r);
-//     }
-//     rightBuffer.pop();
-//     // rightBuffer.circle(xpos,ypos,10);
-// }
 
 function drawFloor() {
     floorBuffer.push();
@@ -642,22 +629,3 @@ function drawFloor() {
     // pop();
 
 }
-
-// function drawShowBuffer() {
-//     showBuffer.background(0);
-//     // showBuffer.directionalLight(200, 200, 200, 0, 0, -100);
-//     // showBuffer.ambientLight(100);
-//     showBuffer.texture(rightBuffer);
-//     showBuffer.push();
-//     showBuffer.rotateX(frameCount*0.005);
-//     showBuffer.rotateZ(frameCount*0.008);
-//     showBuffer.translate(0,0,50);
-//
-//     showBuffer.plane(300, 300);
-//     // showBuffer.cylinder(100, 10, 24, 1, true, true);
-//     showBuffer.pop();
-//
-//     // showBuffer.textSize(64);
-//     // showBuffer.textAlign(CENTER);
-//     // showBuffer.text("Result", size/2, size/2);
-// }
