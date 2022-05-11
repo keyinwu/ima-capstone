@@ -35,6 +35,7 @@ div.layout-space {
 
 div.pc-title {
   font-size: 5rem;
+  /* color: rgb(94, 64, 93); */
   text-align: center;
   /* height: 100%; */
   position: sticky;
@@ -49,6 +50,7 @@ div.pc-chi {
 
 div.pc-content {
   font-size: 1.5rem;
+  /* color: rgb(230, 159, 53); */
   text-align: left;
   display: none;
 }

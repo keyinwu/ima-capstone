@@ -91,12 +91,16 @@ class Torus {
     push();
     // drawingContext.shadowBlur = 32;
     // drawingContext.shadowColor = color(200);
-    // fill(250);
-    // noStroke();
     // specularMaterial(255);
     rotateZ(PI);
-    normalMaterial();
-    texture(symtex);
+    // normalMaterial();
+    if (this.camX-this.x < 60 && this.camX-this.x > -60 && this.camZ - this.z < 130 && this.camZ - this.z >= 90) {
+      texture(symtex2);
+    }
+    else {
+      texture(symtex);
+    }
+
     model(this.model);
     // shininess(10);
     // torus(this.r, this.tuber); //change after adjusting camera , 30, 16

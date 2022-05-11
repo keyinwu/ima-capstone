@@ -39,58 +39,19 @@ let prevY;
 let prevZ;
 
 //paper cutting materials
-let large;
-let largeBuffer;
-let complete;
-let completeBuffer;
-let lively;
-let livelyBuffer;
-let animism;
-let animismBuffer;
-let imagery;
-let imageryBuffer;
-let folk;
-let folkBuffer;
-let doll;
-let dollBuffer;
-let doorgod;
-let doorgodBuffer;
-let tigers;
-let tigersBuffer;
-let textures;
-let texturesBuffer;
-let serrations;
-let serrationsBuffer;
-let crescents;
-let crescentsBuffer;
-let maojiao;
-let maojiaoBuffer;
-let worship;
-let worshipBuffer;
-let witchcraft;
-let witchcraftBuffer;
-let zhuyou;
-let zhuyouBuffer;
-let newyear;
-let newyearBuffer;
-let wish;
-let wishBuffer;
-let various;
-let variousBuffer;
-let language;
-let languageBuffer;
+let large, complete, lively, animism, imagery, doll, doorgod, tigers, textures, serrations, crescents, maojiao, worship, witchcraft, zhuyou, newyear, wish, language, various;
+
+let overview;
 
 let contents=[];
-let idnames= ["large","complete","lively","animism","imagery","doll","doorgod","tigers","textures","serrations","crescents","maojiao","worship","witchcraft","zhuyou","newyear","wish","various","language"];
-
-// let buffers = [completeBuffer,livelyBuffer,animismBuffer,imageryBuffer,folkBuffer,dollBuffer,doorgodBuffer,tigersBuffer,texturesBuffer,serrationsBuffer,crescentsBuffer,maojiaoBuffer,worshipBuffer,witchcraftBuffer,zhuyouBuffer,newyearBuffer,wishBuffer,variousBuffer,languageBuffer]
+let idnames= ["large","complete","lively","animism","imagery","doll","doorgod","tigers","textures","serrations","crescents","maojiao","worship","witchcraft","zhuyou","newyear","wish","language","various"];
 
 let symbols=[];
 let scrolled;
 
 // to finish
-let symtex;
-let largeM, completeM, livelyM, animismM, imageryM, dollM, doorgodM, tigersM, texturesM, serrationsM, crescentsM, maojiaoM, worshipM, witchcraftM, zhuyouM, newyearM, wishM, variousM, languageM;
+let symtex, symtex2;
+let largeM, completeM, livelyM, animismM, imageryM, dollM, doorgodM, tigersM, texturesM, serrationsM, crescentsM, maojiaoM, worshipM, witchcraftM, zhuyouM, newyearM, wishM, languageM, variousM;
 let models=[];
 
 //leftBuffer
@@ -131,7 +92,7 @@ let colorChange = false;
 let timecheck;
 let stopcheck = false;
 
-let totalAssets = 39; // 40 - 1
+let totalAssets = 40; // 40 - 1 + 1
 let assetArray = [];
 
 function updateLoadingBar(asset) {
@@ -187,6 +148,7 @@ function preload(){
   various = loadImage('images/various.jpeg', updateLoadingBar);
 
   symtex = loadImage('images/texture4.jpeg');
+  symtex2 = loadImage('images/texture5.jpeg');
   // loading models
   largeM = loadModel('assets/large.obj', updateLoadingBar);
   completeM = loadModel('assets/complete.obj', updateLoadingBar);
@@ -195,20 +157,22 @@ function preload(){
   imageryM = loadModel('assets/imagery.obj', updateLoadingBar);
   dollM = loadModel('assets/doll.obj', updateLoadingBar);
   doorgodM = loadModel('assets/doorgod.obj', updateLoadingBar);
-  tigersM = loadModel('assets/complete.obj', updateLoadingBar); // -----
-  texturesM = loadModel('assets/complete.obj', updateLoadingBar);  // -----
+  tigersM = loadModel('assets/tigers.obj', updateLoadingBar);
+  texturesM = loadModel('assets/textures.obj', updateLoadingBar);
   serrationsM = loadModel('assets/serrations.obj', updateLoadingBar);
   crescentsM = loadModel('assets/crescents.obj', updateLoadingBar);
   maojiaoM = loadModel('assets/maojiao.obj', updateLoadingBar);
-  worshipM = loadModel('assets/complete.obj', updateLoadingBar); // -----
+  worshipM = loadModel('assets/worship.obj', updateLoadingBar);
   witchcraftM = loadModel('assets/witchcraft.obj', updateLoadingBar);
-  zhuyouM = loadModel('assets/complete.obj', updateLoadingBar); // -----
+  zhuyouM = loadModel('assets/zhuyou.obj', updateLoadingBar);
   newyearM = loadModel('assets/newyear.obj', updateLoadingBar);
   wishM = loadModel('assets/wish.obj', updateLoadingBar);
   languageM = loadModel('assets/language.obj', updateLoadingBar);
   variousM = loadModel('assets/various.obj', updateLoadingBar);
 
-  myFont = loadFont('font/Inconsolata-Medium.ttf', updateLoadingBar);
+  overview = loadModel('assets/overview.obj', updateLoadingBar);
+
+  myFont = loadFont('fonts/Inconsolata-Medium.ttf', updateLoadingBar);
  }
 
 
@@ -598,7 +562,8 @@ function drawFloor() {
     floorBuffer.push();
     floorBuffer.background(0);
     floorBuffer.translate(0, 500);
-    floorBuffer.stroke(255, 169, 56);
+    // floorBuffer.stroke(255, 169, 56);
+    floorBuffer.stroke(207, 157, 205);
     floorBuffer.strokeWeight(5);
     floorBuffer.noFill();
     floorBuffer.arc(0, 0, 1800, 1800, -PI/6, PI/6, PIE); // 2000
