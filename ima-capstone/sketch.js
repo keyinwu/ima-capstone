@@ -5,6 +5,7 @@ let loadCounter = 0;
 let scene = 0;
 
 let myFont;
+let waterFont;
 
 let leftBuffer;
 let rightBuffer;
@@ -92,7 +93,7 @@ let colorChange = false;
 let timecheck;
 let stopcheck = false;
 
-let totalAssets = 40; // 40 - 1 + 1
+let totalAssets = 41; // 42 - 1
 let assetArray = [];
 
 function updateLoadingBar(asset) {
@@ -173,6 +174,7 @@ function preload(){
   overview = loadModel('assets/overview.obj', updateLoadingBar);
 
   myFont = loadFont('fonts/Inconsolata-Medium.ttf', updateLoadingBar);
+  waterFont = loadFont('fonts/WaterBrush-Regular.ttf', updateLoadingBar);
  }
 
 
@@ -376,11 +378,14 @@ function mouseWheel(event) {
 }
 
 function drawContents() {
+  // if (cameraZ >= 50) {
   background(0);
+// }
   ambientLight(200);
   // directionalLight(255, 255, 255, 0, 0, 1);
 
   // Contents on Display
+  // console.log(cameraZ);
   if (cameraZ >= 650) {
     if (cameraZ > 700) {
       contentsSetup(symbols[0], 0,0,900);
@@ -392,8 +397,19 @@ function drawContents() {
     contentsSetup(symbols[5], -110,0,600);
     contentsSetup(symbols[6], 0,0,680);
     contentsSetup(symbols[7], 110,0,600);
-
   }
+  // if (cameraZ < 670 && cameraZ >= 600) {
+  //   push();
+  //   rotateY(atan2(cameraX, cameraZ))
+  //   translate(0, 0, 590);
+  //   let textalp = map(abs(cameraZ-650), 10, 20, 255, 0);
+  //   fill(255, textalp);
+  //   textAlign(CENTER, CENTER);
+  //   textSize(48);
+  //   textFont(waterFont);
+  //   text("2. Textures", 0, 0);
+  //   pop();
+  // }
   if (cameraZ < 650 && cameraZ >= 450) {
     contentsSetup(symbols[8], -110,0,500);
     contentsSetup(symbols[9], -55,0,400);
@@ -521,7 +537,7 @@ function contentsSetup(symbol, cx, cy, cz, logging=false) {
   push();
   translate(cx, cy, cz);
   translate(0,10,10);
-  symbol.update(cx, cz+10, cameraX, cameraZ);
+  symbol.update(cx, cz+10, cameraX, cameraZ, prevZ);
   if (logging) { // for debugging
     symbol.logging();
   }

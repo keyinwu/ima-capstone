@@ -19,7 +19,7 @@ class Torus {
     this.preenter = false;
   }
 
-  update(x, z, camX, camZ) {
+  update(x, z, camX, camZ, prevZ) {
     this.x = x;
     this.z = z;
     this.camX = camX;
@@ -27,11 +27,13 @@ class Torus {
     let dis = sqrt(pow(this.camX-this.x,2)+pow(this.camZ-this.z,2));
     // if (dis < 90 && this.camZ - this.z > 60) {
     if (this.camX-this.x < 40 && this.camX-this.x > -40 && this.camZ - this.z < 90 && this.camZ - this.z > 60) {
-      this.enter = true;
-      if (this.alpha < 255 || this.opacity < 1) {
-        this.enterin();
+      if ((camZ-prevZ < 0) || (this.scroll == true)) {
+        this.enter = true;
+        if (this.alpha < 255 || this.opacity < 1) {
+          this.enterin();
+        }
+        this.view(this.buffer, this.alpha);
       }
-      this.view(this.buffer, this.alpha);
     }
     else{
       this.enter = false;
