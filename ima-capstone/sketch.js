@@ -71,6 +71,7 @@ let models=[];
 // let originy;
 // let fansize;
 let particle;
+let connected = [];
 let floorBuffer;
 
 // let xpos;
@@ -480,6 +481,7 @@ function drawPattern() {
         // cpairs.push(camtoPatt(cameraX, cameraZ));
         r += 0.05;
         particle.collect(cameraZ, cameraX);
+        updateConnection();
         colorChange = !colorChange;
         stopcheck = false;
       }else {
@@ -578,15 +580,16 @@ function drawFloor() {
     floorBuffer.push();
     floorBuffer.background(0);
     floorBuffer.translate(0, 500);
-    // floorBuffer.stroke(255, 169, 56);
-    floorBuffer.stroke(207, 157, 205);
-    floorBuffer.strokeWeight(5);
+    floorBuffer.stroke(180);
+    // floorBuffer.stroke(199, 189, 97);
+    // floorBuffer.stroke(207, 157, 205);
+    floorBuffer.strokeWeight(2);
     floorBuffer.noFill();
-    floorBuffer.arc(0, 0, 1800, 1800, -PI/6, PI/6, PIE); // 2000
+    floorBuffer.arc(0, 0, 2000, 2000, -PI/6, PI/6, PIE); // 2000
     floorBuffer.pop();
 
     // if (requestAnimationFrame(drawFloor) % 3 == 0) {
-      particle.update(cameraZ-25, 500-cameraX);
+    particle.update(cameraZ-25, 500-cameraX);
     // }
     particle.show();
 
@@ -596,17 +599,61 @@ function drawFloor() {
     rotateX(PI/2);
     texture(floorBuffer);
     plane(1000);
-
     pop();
 
-    // push();
-    // translate(0, 50, -60);
-    // rotateY(-PI/2);
-    // rotateX(PI/2);
-    // stroke(255, 169, 56);
-    // strokeWeight(1);
-    // noFill();
-    // arc(0, 0, 1900, 1900, -PI/6, PI/6, PIE);
-    // pop();
+    drawConnection();
 
+}
+
+function drawConnection() {
+  for (var i = 0; i < connected.length/2; i++) {
+    push();
+    translate(connected[2*i][0], connected[2*i][1], connected[2*i][2]);
+    rotateZ(-PI/2);
+    if (connected[2*i][4]>=0) {
+      rotateX(-PI/6);
+    }else {
+      rotateX(PI/6);
+    }
+    stroke(255, 80);
+    // stroke(199, 189, 97);
+    // stroke(255, 245, 153);
+    strokeWeight(1);
+    noFill();
+    arc(0, 0, connected[2*i][3], connected[2*i][3], -abs(connected[2*i][4]), abs(connected[2*i][4]));
+    pop();
+
+    push();
+    translate(connected[2*i+1][0], connected[2*i+1][1], connected[2*i+1][2]);
+    rotateZ(-PI/2);
+    rotateX(PI/2);
+    stroke(255, 80);
+    strokeWeight(1);
+    noFill();
+    arc(0, 0, connected[2*i+1][3], connected[2*i+1][3], -abs(connected[2*i+1][4]), abs(connected[2*i+1][4]));
+    pop();
+  }
+}
+
+function updateConnection() {
+    for (var i = 0; i < particle.collection.length; i++) {
+      let x = 500 - particle.collection[i].y;
+      let z = particle.collection[i].x;
+      let gamma = atan2(x, z);
+      connected[2*i] = [];
+      connected[2*i+1] = [];
+      if (gamma>=0) {
+        let dr = sin(PI/6-gamma)*(x/asin(gamma));
+        connected[2*i] = [x/4+sqrt(3)*z/4, 80+dr/tan(gamma), sqrt(3)*x/4+3*z/4, dr*2/sin(gamma), gamma];
+        let symx = -x/2+sqrt(3)*z/2;
+        let symz = sqrt(3)*x/2+z/2;
+        connected[2*i+1] =[symx, 80+symz*sqrt(3), 0, 4*symz, PI/6];
+      }else {
+        let dr = sin(PI/6+gamma)*(-x/asin(-gamma));
+        connected[2*i] = [x/4-sqrt(3)*z/4, 80+dr/tan(-gamma), -sqrt(3)*x/4+3*z/4, dr*2/sin(-gamma), gamma];
+        let symx = -x/2-sqrt(3)*z/2;
+        let symz = -sqrt(3)*x/2+z/2;
+        connected[2*i+1] =[symx, 80+symz*sqrt(3), 0, 4*symz, PI/6];
+      }
+    }
 }
