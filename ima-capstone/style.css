@@ -12,16 +12,68 @@ canvas {
   width: 100%;
 }
 
+div#input-name {
+  position: absolute;
+  top: 20%;
+  /* top: 40%; */
+  left: 35%;
+  width: 30%;
+  z-index: 10;
+  opacity: 70%;
+  display: none;
+  text-align: center;
+}
+
+/* .form-floating>label {
+  width: 100%;
+} */
+
+.btn{
+  width: 100%
+}
+
+div#hint {
+  font-size: 1rem;
+  color: white;
+  text-align: center;
+  width: 30%;
+  left: 35%;
+  top: 90%;
+  position: relative;
+  z-index: 10;
+  display: none;
+  /* padding-top: 10%; */
+}
+
+div#intro {
+  font-family:cursive;
+  font-size: 4rem;
+  text-align: center;
+  width: 50%;
+  left: 25%;
+  top: 45%;
+  position: relative;
+  z-index: 10;
+  display: none;
+  /* padding-top: 10%; */
+}
+
+div#intro-2 {
+  opacity: 0.8
+}
+div#intro-3 {
+  opacity: 0.6
+}
+div#intro-4 {
+  opacity: 0.4
+}
+
 div.container-fluid {
   position: absolute;
   color: orange;
   height: 100%;
   width: 100%;
   /* border-radius: 15px; */
-}
-
-div.row {
-  /* background-color: rgb(255, 255, 255, 0.3); */
 }
 
 div.layout-space {
@@ -43,7 +95,7 @@ div.layout-space {
 
 div.pc-title {
   font-size: 5rem;
-  /* color: rgb(94, 64, 93); */
+  /* color: rgb(94, 64, 93, 0.3); */
   text-align: center;
   /* height: 100%; */
   position: sticky;

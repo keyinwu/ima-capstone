@@ -33,6 +33,14 @@
       <div class="progress-bar progress-bar-striped progress-bar-animated" id="progbar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
     </div>
 
+    <div id="input-name">
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="floatingInput" placeholder="Username">
+        <label for="floatingInput">Your Name</label>
+      </div>
+      <button type="button" class="btn btn-outline-light" id="name-btn" onclick='entername()'>Enter</button>
+    </div>
+
     <div class="container-fluid vh-100 overflow-auto px-1 py-5">
       <!-- <div class="col-md-10" id=“stage1”>
         1. Patterns
@@ -518,9 +526,22 @@
   			<span class="m_scroll_arrows trei"></span>
   		</div>
       </div>
-
-
     </div>
+
+    <!-- <div id="intro">
+     <i>Welcome to Trace Can Tell</i>
+   </div> -->
+
+   <div id="intro">
+    <div id="intro-1"><i>Move Your Mouse</i></div>
+    <div id="intro-2"><i>Collect thoughts</i></div>
+    <div id="intro-3"><i>Welcome to</i></div>
+    <div id="intro-4"><i>Trace Can Tell</i></div>
+  </div>
+
+    <div id="hint">
+     <i>Press "Space" to Save Your "Trace"!</i>
+   </div>
 
   </body>
 </html>

@@ -42,7 +42,7 @@ let prevZ;
 //paper cutting materials
 let large, complete, lively, animism, imagery, doll, doorgod, tigers, textures, serrations, crescents, maojiao, worship, witchcraft, zhuyou, newyear, wish, language, various;
 
-let overview;
+let overview, fanfloor;
 
 let contents=[];
 let idnames= ["large","complete","lively","animism","imagery","doll","doorgod","tigers","textures","serrations","crescents","maojiao","worship","witchcraft","zhuyou","newyear","wish","language","various"];
@@ -96,6 +96,8 @@ let stopcheck = false;
 
 let totalAssets = 41; // 42 - 1
 let assetArray = [];
+
+let usrname;
 
 function updateLoadingBar(asset) {
   assetArray.push(asset);
@@ -172,7 +174,8 @@ function preload(){
   languageM = loadModel('assets/language.obj', updateLoadingBar);
   variousM = loadModel('assets/various.obj', updateLoadingBar);
 
-  overview = loadModel('assets/overview.obj', updateLoadingBar);
+  overview = loadModel('assets/overview-v2.obj', updateLoadingBar);
+  fanfloor = loadModel('assets/fan-v2.obj', updateLoadingBar);
 
   myFont = loadFont('fonts/Inconsolata-Medium.ttf', updateLoadingBar);
   waterFont = loadFont('fonts/WaterBrush-Regular.ttf', updateLoadingBar);
@@ -216,6 +219,7 @@ function setup() {
     patternBuffer.ellipse(size / 2, size / 2, 2*bg_r, 2*bg_r);
 
     particle = new Particle(cameraZ, 500-cameraX, floorBuffer);
+
     // console.log("setup running");
     // tB1 = createGraphics(200, 200);
     // tB2 = createGraphics(200, 200);
@@ -247,9 +251,9 @@ function setup() {
 
 function draw() {
     if (scene == 0) {
-      let x = map(mouseX-width/2, -width/2+100, width/2-100, -200, 200, true);
-      let y = map(mouseY-height/2, -height/2+100, height/2-100, -100, 100, true);
-      camera(cameraX, cameraY, cameraZ, x, y, 0, 0, 1, 0);
+      let x = map(mouseX-width/2, -width/2+100, width/2-100, 200, 250, true);
+      let y = map(mouseY-height/2, -height/2+100, height/2-100, -20, 20, true);
+      camera(cameraX, -300, cameraZ - sin(frameCount / 400)*200, x, y, 0, 0, 1, 0);
       drawIntro();
     }else if (scene == 1){
       resizeCanvas(windowWidth, windowHeight, WEBGL);
@@ -270,23 +274,55 @@ function draw() {
 //   text("Loading...", 0, 0);
 // }
 
+function entername(){
+  usrname = document.getElementById("floatingInput").value;
+  console.log(usrname);
+  document.getElementById("input-name").style.display = "none";
+  document.getElementById("intro").style.display = "none";
+  scene = 1;
+}
+
 function drawIntro(){ // to change, add a button
+  document.getElementById("input-name").style.display = "block";
+  document.getElementById("intro").style.display = "block";
   background(0);
-  fill(255);
-  textAlign(CENTER, CENTER);
-  textSize(64);
-  textFont(myFont);
-  text("Press enter to start (temporary version)", 0, 0);
+  push();
+  // fill(255);
+  // textAlign(CENTER, CENTER);
+  // textSize(64);
+  // textFont(myFont);
+  // text("Press enter to start (temporary version)", 0, 0);
+  let locX = mouseX - width / 2;
+  let locY = mouseY - height / 2;
+  ambientLight(150);
+  // spotLight(0, 250, 0, locX, -100, locY, 0, 1, 0, PI / 16);
+
+  translate(350,0,-250);
+  rotateZ(PI);
+  // rotateY(PI/6+millis()/1800);
+  rotateY(-5*PI/12+ sin(frameCount / 200) * 6*PI/12);
+  scale(8,6,6);
+  texture(symtex2);
+  // normalMaterial();
+  model(overview);
+  translate(0,-20,0);
+  scale(0.75,1,1);
+  texture(symtex);
+  model(fanfloor);
+  pop();
+
+
+
 }
 
 function keyPressed(){
-  if (keyCode===ENTER) {
-    scene = 1;
-  }
-  // UP_ARROW
-  if (keyCode===32) { //&& cameraZ < xx
+  // if (keyCode===ENTER) {
+  //   scene = 1;
+  // }
+  if (keyCode===32 && cameraZ < 50) {
     // saveCanvas(patternBuffer, "TCT_pattern", "jpg")
-    patternBuffer.save("pattern.jpg")
+    let filename = usrname.replace(/\s+/g, '-').toLowerCase() + "-" + year() + "-" + month() + "-" + day() + "-" + hour() + "-" + minute() + "-" + second();
+    patternBuffer.save(filename+".jpg")
   }
 }
 
@@ -332,7 +368,7 @@ function drawMove() {
     }else{
       cameraX += 0.5*movespeed;
     }
-    if (mouseY > 4*height/5) {
+    if (mouseY > 4*height/5 && cameraZ >= 50) {
       delta_y = map(mouseY-4*height/5, 0, height/5, 0, cameraZ*2, true);
     }
   }
@@ -426,12 +462,14 @@ function drawContents() {
     contentsSetup(symbols[16], 60,0,200);
   }
   if (cameraZ < 250 && cameraZ >= 50) {
+    document.getElementById("hint").style.display = "none";
     contentsSetup(symbols[17], 0,0,100);
     contentsSetup(symbols[18], 0,0,0);
   }
 
   //show pattern
   if (cameraZ < 50) {
+    document.getElementById("hint").style.display = "block";
     push();
     translate(0, 0, -100);
     // rotateZ(frameCount * 0.03)
@@ -477,7 +515,7 @@ function drawPattern() {
       stopcheck = true;
       r += 0.01;
     } else {
-      if (frameCount - timecheck > 80) {
+      if (frameCount - timecheck > 100) {
         // cpairs.push(camtoPatt(cameraX, cameraZ));
         r += 0.05;
         particle.collect(cameraZ, cameraX);
