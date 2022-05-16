@@ -102,7 +102,7 @@ class Torus {
     else {
       texture(symtex);
     }
-
+    noStroke();
     model(this.model);
     // shininess(10);
     // torus(this.r, this.tuber); //change after adjusting camera , 30, 16
@@ -133,6 +133,7 @@ class Torus {
     push();
     translate(0,-10,-10);
     texture(cbuffer);
+    noStroke();
     plane(120, 120); // to change
     pop();
   }

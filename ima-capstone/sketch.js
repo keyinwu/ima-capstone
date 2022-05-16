@@ -28,7 +28,7 @@ let startZ = 1000;
 let maxX0 = 250;
 let maxX;
 let maxZ = 1000;
-let minZ = -100;
+let minZ = -10;
 let delta_x = 0;
 let delta_y = 0;
 let xangle = 0;
@@ -81,7 +81,7 @@ let floorBuffer;
 let fand;
 let fantheta;
 
-let size;
+let psize;
 
 
 //animation pattern
@@ -203,12 +203,12 @@ function setup() {
 
     createCanvas(windowWidth, windowHeight, WEBGL);
     floorBuffer = createGraphics(1000, 1000);
-    perspective(3*PI/7, width/height, 0.1, (height/2) / tan(PI/6)*10); //width/height?
+    perspective(3*PI/7, width/height, 0.0001, (height/2) / tan(PI/6)*10); // width/height, the ratio
     cursor('grab');
 
     //pattern
-    size = 400;
-    patternBuffer = createGraphics(400, 400);
+    psize = 400;
+    patternBuffer = createGraphics(psize, psize);
     patternBuffer.pixelDensity(2); // change to 3
 
     r = 2;
@@ -224,38 +224,11 @@ function setup() {
     let rightColor = color(140, 10, 10);//190,10,10
     // rightColor.setAlpha(128 + 128 * sin(millis() / 1000));
     patternBuffer.fill(rightColor);
-    patternBuffer.ellipse(size / 2, size / 2, 2*bg_r, 2*bg_r);
+    patternBuffer.ellipse(psize / 2, psize / 2, 2*bg_r, 2*bg_r);
 
     particle = new Particle(cameraZ, 500-cameraX, floorBuffer);
 
     // introbg.play();
-
-    // console.log("setup running");
-    // tB1 = createGraphics(200, 200);
-    // tB2 = createGraphics(200, 200);
-
-    // xpos = 0;
-    // ypos = 0;
-    //
-    // //leftBuffer rotation
-    // rot_spd = frameCount * 0.001;
-    // rot_acc = 0;
-    //
-    // //animation
-
-    //
-    // originx = 0;
-    // originy = 200;
-    // fansize = 1600;
-    //
-    // rightBuffer.background(0);
-    // rightBuffer.ellipseMode(CENTER);
-    // rightBuffer.noStroke();
-    // let rightColor = color(190,10,10);
-    // // rightColor.setAlpha(128 + 128 * sin(millis() / 1000));
-    // rightBuffer.fill(rightColor);
-    // rightBuffer.ellipse(size / 2, size / 2, 2*bg_r, 2*bg_r);
-
 
 }
 
@@ -271,15 +244,6 @@ function draw() {
     }
 
 }
-
-// function drawLoading(){
-//   background(220);
-//   fill(255);
-//   textAlign(CENTER, CENTER);
-//   textSize(32);
-//   textFont(myFont);
-//   text("Loading...", 0, 0);
-// }
 
 function entername(){
   // introbg.stop();
@@ -316,6 +280,7 @@ function drawIntro(){ // to change, add a button
   rotateY(-5*PI/12+ sin(frameCount / 200) * 6*PI/12);
   scale(8,6,6);
   texture(symtex2);
+  noStroke();
   // normalMaterial();
   model(overview);
   translate(0,-20,0);
@@ -488,6 +453,7 @@ function drawContents() {
     // rotateZ(frameCount * 0.03)
     // rotateX(frameCount * 0.02)
     texture(patternBuffer);
+    noStroke();
     plane(130);
     pop();
   }
@@ -655,6 +621,7 @@ function drawFloor() {
     rotateY(-PI/2);
     rotateX(PI/2);
     texture(floorBuffer);
+    noStroke();
     plane(1000);
     pop();
 
