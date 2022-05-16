@@ -1,25 +1,15 @@
 "use strict"
 
 let loading = true;
-let loadCounter = 0;
 let scene = 0;
 
 let myFont;
 let waterFont;
 
-let leftBuffer;
-let rightBuffer;
-let moveBuffer;
-let showBuffer;
-let textBuffer;
-let textBuffer2;
-let maskBuffer;
-let tB1;
-let tB2;
-
 let patternBuffer;
+let floorBuffer;
 
-//camera
+// camera
 let cameraLock = false;
 let cameraX = 0;
 let cameraY = 0;
@@ -39,78 +29,51 @@ let prevX;
 let prevY;
 let prevZ;
 
-//paper cutting materials
+// paper cutting materials
 let large, complete, lively, animism, imagery, doll, doorgod, tigers, textures, serrations, crescents, maojiao, worship, witchcraft, zhuyou, newyear, wish, language, various;
-
-let overview, fanfloor;
-
-let floorimg;
-
-let contents=[];
 let idnames= ["large","complete","lively","animism","imagery","doll","doorgod","tigers","textures","serrations","crescents","maojiao","worship","witchcraft","zhuyou","newyear","wish","language","various"];
-
+let contents=[];
 let symbols=[];
-let scrolled;
+let floorimg;
+let scrolled; // object
 
-// to finish
+// models
 let symtex, symtex2;
 let largeM, completeM, livelyM, animismM, imageryM, dollM, doorgodM, tigersM, texturesM, serrationsM, crescentsM, maojiaoM, worshipM, witchcraftM, zhuyouM, newyearM, wishM, languageM, variousM;
+let overview, fanfloor;
 let models=[];
 
-//leftBuffer
-// let cam;
-// let flame = [];
-// let numflame = 20;
-//
-// let rot_spd;
-// let rot_acc;
-// let textimg;
-// let textclr;
-// let rendered;
-// let imgMask;
-//
-// let originx;
-// let originy;
-// let fansize;
+// floor
 let particle;
 let connected = [];
-let floorBuffer;
 
-// let xpos;
-// let ypos;
-let fand;
-let fantheta;
-
+// pattern
 let psize;
-
-
-//animation pattern
 let r, d;
 let theta;
-
 let bg_r;
 let cpairs = [];
-
 let colorChange = false;
 
+// trace
 let timecheck;
 let stopcheck = false;
 
+// loading
 let totalAssets = 43; // 44 - 1
 let assetArray = [];
 
-let usrname;
+// sound
 let introbg, loopbg;
+
+let usrname;
 
 function updateLoadingBar(asset) {
   assetArray.push(asset);
-  // console.log(assetArray.length);
-
   let prog = document.getElementById("progbar");
   // console.log(prog.ariaValueNow);
   prog.ariaValueNow = int(100 * assetArray.length / totalAssets);
   prog.style.width = floor(100 * assetArray.length / totalAssets) + "%";
-
   // let bar = document.getElementById("loadingbar");
   // bar.style.width = floor(100 * assetArray.length / totalAssets) + "%";
 
@@ -126,14 +89,9 @@ function updateLoadingBar(asset) {
     asset.filter(GRAY);
     // contents[index] = asset;
   }
-  // if (asset instanceof p5.Geometry) {
-  //   models[index] = asset; // ---
-  //   symbols[index] = new Torus(idnames[index], asset);
-  // }
 }
 
 function preload(){
-  // to change
   large = loadImage('images/large.jpeg', updateLoadingBar);
   complete = loadImage('images/complete.jpeg', updateLoadingBar);
   lively = loadImage('images/lively.jpeg', updateLoadingBar);
@@ -197,13 +155,13 @@ function setup() {
     models = [largeM, completeM, livelyM, animismM, imageryM, dollM, doorgodM, tigersM, texturesM, serrationsM, crescentsM, maojiaoM, worshipM, witchcraftM, zhuyouM, newyearM, wishM, languageM, variousM];
 
     for (let i = 0; i < contents.length; i++) {
-      let newsym = new Torus(contents[i], idnames[i], models[i]); //to change
+      let newsym = new Torus(contents[i], idnames[i], models[i]);
       symbols.push(newsym)
     }
 
     createCanvas(windowWidth, windowHeight, WEBGL);
     floorBuffer = createGraphics(1000, 1000);
-    perspective(3*PI/7, width/height, 0.0001, (height/2) / tan(PI/6)*10); // width/height, the ratio
+    perspective(3*PI/7, width/height, 0.00001, (height/2) / tan(PI/6)*10); // width/height, the ratio
     cursor('grab');
 
     //pattern
@@ -228,7 +186,9 @@ function setup() {
 
     particle = new Particle(cameraZ, 500-cameraX, floorBuffer);
 
-    // introbg.play();
+    setFloor();
+
+    // introbg.play();  // to add // need user action to trigger play
 
 }
 
@@ -239,7 +199,7 @@ function draw() {
       resizeCanvas(windowWidth, windowHeight, WEBGL);
       drawMove();
       drawContents();
-      drawFloor(); //to do
+      drawFloor();
       drawPattern();
     }
 
@@ -255,7 +215,7 @@ function entername(){
   scene = 1;
 }
 
-function drawIntro(){ // to change, add a button
+function drawIntro(){
   document.getElementById("input-name").style.display = "block";
   document.getElementById("intro").style.display = "block";
   let x = map(mouseX-width/2, -width/2+100, width/2-100, 200, 250, true);
@@ -337,9 +297,9 @@ function drawMove() {
     delta_x = 0;
     delta_y = 0;
     if (abs(mouseX-width/2) < 200) {
-      movespeed = map(abs(mouseX-width/2), 5, 200, 0.05, 0.5, true)
+      movespeed = map(abs(mouseX-width/2), 5, 200, 0.05, 0.4, true)
     }else {
-      movespeed = map(abs(mouseX-width/2), 100, width/2-200, 0.5, 3, true)
+      movespeed = map(abs(mouseX-width/2), 100, width/2-200, 0.4, 2, true)
     }
     if (mouseX < width/2) {
       cameraX -= 0.5*movespeed;
@@ -362,7 +322,7 @@ function drawMove() {
     cameraX = maxX;
   }
 
-  cameraY = 8 * sin(frameCount / 30 + PI)
+  cameraY = 8 * sin(frameCount / 120 + PI);
   if (mouseIsPressed) {
     cameraLock = false;
     if (mouseY < 2*height/3 && cameraZ >= minZ) {
@@ -397,10 +357,8 @@ function drawContents() {
   background(0);
 // }
   ambientLight(200);
-  // directionalLight(255, 255, 255, 0, 0, 1);
 
   // Contents on Display
-  // console.log(cameraZ);
   if (cameraZ >= 650) {
     if (cameraZ > 700) {
       contentsSetup(symbols[0], 0,0,900);
@@ -413,7 +371,7 @@ function drawContents() {
     contentsSetup(symbols[6], 0,0,680);
     contentsSetup(symbols[7], 110,0,600);
   }
-  // if (cameraZ < 670 && cameraZ >= 600) {
+  // if (cameraZ < 670 && cameraZ >= 600) {  // transition // future dev
   //   push();
   //   rotateY(atan2(cameraX, cameraZ))
   //   translate(0, 0, 590);
@@ -458,30 +416,6 @@ function drawContents() {
     pop();
   }
 
-
-  //flame to guide
-  // push();
-  // for(let i = flame.length -1; i>= 0; i--){
- 	// flame[i].move();
-  // flame[i].show();
-  // flame[i].shrink();
-  //
-  // if(flame[i].radius <= 0 ){
-  //   //remove the dead ones
-  //   flame.splice(i, 1);
-  //   }
-  // }
-  // // make more fire!!!
-  // let x = 2*fand*tan(fantheta);
-  // let y = 0;
-  // let z = size*2+size/2/tan(PI/6)-fand-120;
-  // let radius = random(1,2);
-  // let b = new Flame(x, 0, z, radius, leftBuffer);
-  // flame.push(b);
-  // // // console.log(flame);
-  // pop();
-
-  // pop();
 }
 
 //3D Pattern
@@ -498,9 +432,10 @@ function drawPattern() {
         // cpairs.push(camtoPatt(cameraX, cameraZ));
         r += 0.05;
         particle.collect(cameraZ, cameraX);
-        updateConnection();
         colorChange = !colorChange;
         stopcheck = false;
+        // updateFloor();
+        updateConnection();
       }else {
         r += 0.01;
       }
@@ -513,8 +448,8 @@ function drawPattern() {
     r = 1;
   }
   //lerp
-  prevX = lerp(prevX, cameraX, 0.5);
-  prevZ = lerp(prevZ, cameraZ, 0.5);
+  prevX = lerp(prevX, cameraX, 0.3);
+  prevZ = lerp(prevZ, cameraZ, 0.3);
 
   d = map(prevZ, 0, startZ, 0, bg_r);
   theta = map(atan2(prevX, prevZ), -atan2(maxX, startZ), atan2(maxX, startZ), -PI/12, PI/12, true);
@@ -565,32 +500,22 @@ function contentsSetup(symbol, cx, cy, cz, logging=false) {
   pop();
 }
 
-// camera position mapping to pattern
-function camtoPatt(x, z) {
-  d = map(z, 0, startZ, 0, bg_r);
-  theta = map(atan2(x, z), -atan2(maxX, startZ), atan2(maxX, startZ), -PI/12, PI/12, true);
-  let px = d * cos(theta-PI/2);
-  let py = d * sin(theta-PI/2);
-  return [px, py]
-}
-
-function censym(xy, r, cp) {
-  if (cp.length == 1) {
-    for (let i = 0; i < xy.length; i++) {
-      patternBuffer.ellipse(2*cp[0][0]-xy[i][0], 2*cp[0][1]-xy[i][1], r, r);
-    }
-  }else{
-    for (let i = 0; i < xy.length; i++) {
-      // console.log(cp);
-      // console.log(xy);
-      let newx = 2*cp[cp.length-1][0]-xy[i][0];
-      let newy = 2*cp[cp.length-1][1]-xy[i][1];
-      patternBuffer.ellipse(newx, newy, r, r);
-      xy.push([newx, newy]);
-    }
-    cp.pop();
-    censym(xy, r, cp);
-  }
+function setFloor() {
+  floorBuffer.background(0);
+  floorBuffer.push();
+  floorBuffer.translate(0, 500);
+  // floorBuffer.stroke(180);
+  floorBuffer.stroke(143, 94, 127);
+  // floorBuffer.stroke(207, 157, 205);
+  floorBuffer.strokeWeight(2);
+  floorBuffer.noFill();
+  floorBuffer.arc(0, 0, 2000, 2000, -PI/6, PI/6, PIE);
+  floorBuffer.pop();
+  floorBuffer.push();
+  floorBuffer.tint(255, 180);
+  // floorBuffer.image(floorimg, 900, 500, 80, 80);
+  // floorBuffer.image(floorimg, 680, 500, 80, 80);
+  floorBuffer.pop();
 }
 
 function drawFloor() {
@@ -615,19 +540,45 @@ function drawFloor() {
     particle.update(cameraZ-25, 500-cameraX);
     // }
     particle.show();
+    particle.showCol();
 
     push();
     translate(0, 80, 500);
     rotateY(-PI/2);
     rotateX(PI/2);
     texture(floorBuffer);
-    noStroke();
     plane(1000);
     pop();
 
     drawConnection();
 
 }
+
+// function drawFloor() {
+//   // floorBuffer.background(0);
+//   // particle.update(cameraZ-25, 500-cameraX);
+//   // particle.show();
+//   push();
+//   translate(0, 80, 500);
+//   rotateY(-PI/2);
+//   rotateX(PI/2);
+//   texture(floorBuffer);
+//   noStroke();
+//   plane(1000);
+//   pop();
+//
+//   drawConnection();
+// }
+
+function updateFloor() {
+    // to optimize
+    // setFloor()
+    // if (requestAnimationFrame(drawFloor) % 3 == 0) {
+    // }
+    particle.showCol();
+    updateConnection();
+}
+
 
 function drawConnection() {
   for (var i = 0; i < connected.length/2; i++) {
@@ -680,4 +631,32 @@ function updateConnection() {
         connected[2*i+1] =[symx, 80+symz*sqrt(3), 0, 4*symz, PI/6];
       }
     }
+}
+
+// camera position mapping to pattern
+function camtoPatt(x, z) {
+  d = map(z, 0, startZ, 0, bg_r);
+  theta = map(atan2(x, z), -atan2(maxX, startZ), atan2(maxX, startZ), -PI/12, PI/12, true);
+  let px = d * cos(theta-PI/2);
+  let py = d * sin(theta-PI/2);
+  return [px, py]
+}
+
+function censym(xy, r, cp) {
+  if (cp.length == 1) {
+    for (let i = 0; i < xy.length; i++) {
+      patternBuffer.ellipse(2*cp[0][0]-xy[i][0], 2*cp[0][1]-xy[i][1], r, r);
+    }
+  }else{
+    for (let i = 0; i < xy.length; i++) {
+      // console.log(cp);
+      // console.log(xy);
+      let newx = 2*cp[cp.length-1][0]-xy[i][0];
+      let newy = 2*cp[cp.length-1][1]-xy[i][1];
+      patternBuffer.ellipse(newx, newy, r, r);
+      xy.push([newx, newy]);
+    }
+    cp.pop();
+    censym(xy, r, cp);
+  }
 }

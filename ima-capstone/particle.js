@@ -59,6 +59,16 @@ class Particle {
       // this.b.fill(255, 245, 153);
       this.b.ellipse(pos.x, pos.y, 5*i/4, 5*i/4);
     }
+    this.b.pop();
+  }
+
+
+  showCol() {
+    this.b.push();
+    this.b.noStroke();
+    this.b.fill(240);
+    this.b.drawingContext.shadowBlur = 8;
+    this.b.drawingContext.shadowColor = color(200);
     for (var i = 0; i < this.collection.length; i++) {
       let pos = this.collection[i];
       // this.b.fill(255, 245, 153);
