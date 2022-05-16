@@ -125,7 +125,7 @@ class Torus {
     cbuffer.push();
     cbuffer.background(0);
     cbuffer.blendMode(ADD);
-    cbuffer.tint(255, 0, 0, alpha);
+    cbuffer.tint(145, 27, 19, alpha);
     // cbuffer.tint(255, 0, 0, -cameraZ*2+2010);  // change with camera position
     cbuffer.image(this.content, 0, 0, cbuffer.width, cbuffer.height);
     cbuffer.pop();

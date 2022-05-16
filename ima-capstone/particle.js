@@ -33,10 +33,10 @@ class Particle {
     this.track.push(v);
     // console.log(this.collection);
     // limit to 20 dots
-    if (this.track.length > 6) {
+    if (this.track.length > 9) {
       this.collection = [];
-      let step = int(this.track.length/6);
-      for (let i = 0; i < 6; i++) {
+      let step = int(this.track.length/9);
+      for (let i = 0; i < 9; i++) {
         this.collection.push(this.track[this.track.length - 1 - i*step]);
       }
     }else {

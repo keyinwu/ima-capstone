@@ -5,6 +5,16 @@ html, body {
   height: 100%;
   width: 100%;
 }
+
+body {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 canvas {
   display: block;
   vertical-align: top;
@@ -51,7 +61,7 @@ div#intro {
   text-align: center;
   width: 50%;
   left: 25%;
-  top: 45%;
+  top: 42%;
   position: relative;
   z-index: 10;
   display: none;
@@ -70,7 +80,7 @@ div#intro-4 {
 
 div.container-fluid {
   position: absolute;
-  color: orange;
+  color: rgb(196, 162, 122);
   height: 100%;
   width: 100%;
   /* border-radius: 15px; */
@@ -145,7 +155,7 @@ div#prog-container {
 }
 
 div#progbar {
-  background-color: rgb(230, 159, 53);
+  background-color: rgb(184, 168, 147);
 }
 
 /* div#loadingbar-container {
@@ -198,8 +208,8 @@ div#loadingbar {
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
 
-  border-right: 3px solid #b58c2e;
-  border-bottom: 3px solid #b58c2e;
+  border-right: 3px solid rgb(196, 162, 122);
+  border-bottom: 3px solid rgb(196, 162, 122);
   margin: 0 0 3px 4px;
 
   width: 32px;

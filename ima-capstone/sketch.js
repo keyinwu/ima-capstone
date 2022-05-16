@@ -44,6 +44,8 @@ let large, complete, lively, animism, imagery, doll, doorgod, tigers, textures, 
 
 let overview, fanfloor;
 
+let floorimg;
+
 let contents=[];
 let idnames= ["large","complete","lively","animism","imagery","doll","doorgod","tigers","textures","serrations","crescents","maojiao","worship","witchcraft","zhuyou","newyear","wish","language","various"];
 
@@ -94,10 +96,11 @@ let colorChange = false;
 let timecheck;
 let stopcheck = false;
 
-let totalAssets = 41; // 42 - 1
+let totalAssets = 43; // 44 - 1
 let assetArray = [];
 
 let usrname;
+let introbg, loopbg;
 
 function updateLoadingBar(asset) {
   assetArray.push(asset);
@@ -151,8 +154,10 @@ function preload(){
   language = loadImage('images/language.jpeg', updateLoadingBar);
   various = loadImage('images/various.jpeg', updateLoadingBar);
 
+  floorimg = loadImage('images/floor-2.png');
   symtex = loadImage('images/texture4.jpeg');
   symtex2 = loadImage('images/texture5.jpeg');
+
   // loading models
   largeM = loadModel('assets/large.obj', updateLoadingBar);
   completeM = loadModel('assets/complete.obj', updateLoadingBar);
@@ -176,6 +181,9 @@ function preload(){
 
   overview = loadModel('assets/overview-v2.obj', updateLoadingBar);
   fanfloor = loadModel('assets/fan-v2.obj', updateLoadingBar);
+
+  introbg = loadSound('music/intro_bg.mp3', updateLoadingBar);
+  loopbg = loadSound('music/loop_bg.mp3', updateLoadingBar);
 
   myFont = loadFont('fonts/Inconsolata-Medium.ttf', updateLoadingBar);
   waterFont = loadFont('fonts/WaterBrush-Regular.ttf', updateLoadingBar);
@@ -213,12 +221,14 @@ function setup() {
     patternBuffer.background(0);
     patternBuffer.ellipseMode(CENTER);
     patternBuffer.noStroke();
-    let rightColor = color(190,10,10);
+    let rightColor = color(140, 10, 10);//190,10,10
     // rightColor.setAlpha(128 + 128 * sin(millis() / 1000));
     patternBuffer.fill(rightColor);
     patternBuffer.ellipse(size / 2, size / 2, 2*bg_r, 2*bg_r);
 
     particle = new Particle(cameraZ, 500-cameraX, floorBuffer);
+
+    // introbg.play();
 
     // console.log("setup running");
     // tB1 = createGraphics(200, 200);
@@ -251,9 +261,6 @@ function setup() {
 
 function draw() {
     if (scene == 0) {
-      let x = map(mouseX-width/2, -width/2+100, width/2-100, 200, 250, true);
-      let y = map(mouseY-height/2, -height/2+100, height/2-100, -20, 20, true);
-      camera(cameraX, -300, cameraZ - sin(frameCount / 400)*200, x, y, 0, 0, 1, 0);
       drawIntro();
     }else if (scene == 1){
       resizeCanvas(windowWidth, windowHeight, WEBGL);
@@ -275,6 +282,8 @@ function draw() {
 // }
 
 function entername(){
+  // introbg.stop();
+  loopbg.play();
   usrname = document.getElementById("floatingInput").value;
   console.log(usrname);
   document.getElementById("input-name").style.display = "none";
@@ -285,6 +294,10 @@ function entername(){
 function drawIntro(){ // to change, add a button
   document.getElementById("input-name").style.display = "block";
   document.getElementById("intro").style.display = "block";
+  let x = map(mouseX-width/2, -width/2+100, width/2-100, 200, 250, true);
+  let y = map(mouseY-height/2, -height/2+100, height/2-100, -20, 20, true);
+  camera(cameraX, -300, cameraZ - sin(frameCount / 400)*200, x, y, 0, 0, 1, 0);
+
   background(0);
   push();
   // fill(255);
@@ -555,7 +568,7 @@ function drawPattern() {
     if (!colorChange) {
       patternBuffer.fill(0);
     }else{
-      patternBuffer.fill(190,10,10);
+      patternBuffer.fill(140, 10, 10);
     }
     patternBuffer.ellipse(x, y, r, r);
   }
@@ -615,15 +628,21 @@ function censym(xy, r, cp) {
 }
 
 function drawFloor() {
-    floorBuffer.push();
+    // to optimize
     floorBuffer.background(0);
+    floorBuffer.push();
     floorBuffer.translate(0, 500);
-    floorBuffer.stroke(180);
-    // floorBuffer.stroke(199, 189, 97);
+    // floorBuffer.stroke(180);
+    floorBuffer.stroke(143, 94, 127);
     // floorBuffer.stroke(207, 157, 205);
     floorBuffer.strokeWeight(2);
     floorBuffer.noFill();
     floorBuffer.arc(0, 0, 2000, 2000, -PI/6, PI/6, PIE); // 2000
+    floorBuffer.pop();
+    floorBuffer.push();
+    floorBuffer.tint(255, 180);
+    // floorBuffer.image(floorimg, 900, 500, 80, 80);
+    // floorBuffer.image(floorimg, 680, 500, 80, 80);
     floorBuffer.pop();
 
     // if (requestAnimationFrame(drawFloor) % 3 == 0) {
