@@ -1,6 +1,6 @@
 class Torus {
 
-  constructor(content, id, model) {
+  constructor(content, id, model, idx) {
     this.x = 0;
     this.z = 0;
     this.r = 18;
@@ -10,6 +10,7 @@ class Torus {
     this.buffer = createGraphics(200, 200); //to change
     this.content = content;
     this.id = id;
+    this.idx = idx;
     this.model = model;
     this.alpha = 0;
     this.opacity = 0;
@@ -17,6 +18,7 @@ class Torus {
     this.scroll = false;
     this.enter = false;
     this.preenter = false;
+    this.close = false;
   }
 
   update(x, z, camX, camZ, prevZ) {
@@ -27,7 +29,7 @@ class Torus {
     let dis = sqrt(pow(this.camX-this.x,2)+pow(this.camZ-this.z,2));
     // if (dis < 90 && this.camZ - this.z > 60) {
     if (this.camX-this.x < 40 && this.camX-this.x > -40 && this.camZ - this.z < 90 && this.camZ - this.z > 60) {
-      if ((camZ-prevZ < 0) || (this.scroll == true)) {
+      if ((this.close == false) && ((camZ-prevZ < 0) || (this.scroll == true))) {
         this.enter = true;
         if (this.alpha < 255 || this.opacity < 1) {
           this.enterin();
@@ -37,6 +39,7 @@ class Torus {
     }
     else{
       this.enter = false;
+      this.close = false;
       this.show();
     }
 
@@ -56,6 +59,7 @@ class Torus {
     // console.log("yes");
     this.cameraL = true;
     this.scroll = true;
+    this.close = false;
     if (this.alpha < 255) {
       this.alpha += 20;
     }
@@ -120,6 +124,10 @@ class Torus {
     }else {
       return null;
     }
+  }
+
+  getIndex(){
+    return this.idx;
   }
 
   view(cbuffer, alpha) {

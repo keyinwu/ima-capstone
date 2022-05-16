@@ -36,7 +36,8 @@ let idnames= ["large","complete","lively","animism","imagery","doll","doorgod","
 let contents=[];
 let symbols=[];
 let floorimg;
-let scrolled; // object
+let triggered; // object
+let trigidx; // index
 
 // models
 let symtex, symtex2;
@@ -115,7 +116,7 @@ function preload(){
   language = loadImage('images/language.jpeg', updateLoadingBar);
   various = loadImage('images/various.jpeg', updateLoadingBar);
 
-  floorimg = loadImage('images/floor-2.png');
+  floorimg = loadImage('images/texture3.jpeg');
   symtex = loadImage('images/texture4.jpeg');
   symtex2 = loadImage('images/texture5.jpeg');
 
@@ -158,7 +159,7 @@ function setup() {
     models = [largeM, completeM, livelyM, animismM, imageryM, dollM, doorgodM, tigersM, texturesM, serrationsM, crescentsM, maojiaoM, worshipM, witchcraftM, zhuyouM, newyearM, wishM, languageM, variousM];
 
     for (let i = 0; i < contents.length; i++) {
-      let newsym = new Torus(contents[i], idnames[i], models[i]);
+      let newsym = new Torus(contents[i], idnames[i], models[i], i);
       symbols.push(newsym)
     }
 
@@ -202,16 +203,7 @@ function draw() {
       resizeCanvas(windowWidth, windowHeight, WEBGL);
       drawMove();
       drawContents();
-
-      // Quoey, move and organize this code below
-      const scrollSpeed = 5;
-      if (mouseY > height * 2/3) {
-        scrollContainer.scrollTop += scrollSpeed;
-      } else if (mouseY < height * 1/3) {
-        //scrollContainer.scrollTop -= scrollSpeed;
-      }
-      scrollContainer.scrollTop = constrain(scrollContainer.scrollTop, 0, 300);
-
+      drawScroll();
       drawFloor();
       drawPattern();
     }
@@ -257,7 +249,7 @@ function drawIntro(){
   model(overview);
   translate(0,-20,0);
   scale(0.75,1,1);
-  texture(symtex);
+  texture(floorimg);
   model(fanfloor);
   pop();
 
@@ -348,20 +340,9 @@ function drawMove() {
 }
 
 function mouseWheel(event) {
-  // console.log(scrolled);
-  if (scrolled) {
-    document.getElementById(scrolled+"-1").style.display = "block";
-    document.getElementById(scrolled+"-2").style.display = "block";
-    document.getElementById("m_scroll").style.display = "none";
-    scrolled = null;
-  }
-  if (scene == 1) {
+  if (scene == 1 && !cameraLock) {
     //console.log(event.delta);
-    cameraLock = false;
-    // M:
-    // adjust the value.
-    // feel free to flip the direction!
-    // let s = map(event.delta)
+    // cameraLock = false;
     let delta = event.delta;
     if (delta > 200) {
       delta = 200;
@@ -369,11 +350,37 @@ function mouseWheel(event) {
     if (delta < -200) {
       delta = -200;
     }
-    delta = lerp(prevS, delta, 0.1);
-    let speed = delta * -0.01;
+    delta = lerp(prevS, delta, 0.2);
+    let speed = delta * -0.05;
     cameraZ += speed;
     prevS = delta;
   }
+}
+
+function mouseClicked() {
+  if (cameraLock) {
+    cameraLock = false;
+    symbols[trigidx].enter = false;
+    symbols[trigidx].close = true;
+    console.log(trigidx, symbols[trigidx].close);
+  }
+}
+
+function drawScroll() {
+  const scrollSpeed = 5;
+  if (mouseY > height * 2/3) {
+    if (triggered) {
+      document.getElementById(triggered+"-1").style.display = "block";
+      document.getElementById(triggered+"-2").style.display = "block";
+      document.getElementById("m_scroll").style.display = "none";
+      triggered = null;
+    }
+    scrollContainer.scrollTop += scrollSpeed;
+  } else if (mouseY < height * 1/3) {
+    scrollContainer.scrollTop -= scrollSpeed;
+  }
+  scrollContainer.scrollTop = constrain(scrollContainer.scrollTop, 0, 800);
+
 }
 
 function drawContents() {
@@ -520,7 +527,11 @@ function contentsSetup(symbol, cx, cy, cz, logging=false) {
     symbol.logging();
   }
   cameraLock = cameraLock || symbol.isLock();
-  scrolled = scrolled || symbol.isScroll();
+  triggered = triggered || symbol.isScroll();
+  if (symbol.isScroll()) {
+    trigidx = symbol.getIndex();
+    console.log(triggered, trigidx);
+  }
   pop();
 }
 
@@ -548,7 +559,7 @@ function drawFloor() {
     floorBuffer.push();
     floorBuffer.translate(0, 500);
     // floorBuffer.stroke(180);
-    floorBuffer.stroke(143, 94, 127);
+    floorBuffer.stroke(158, 144, 156);
     // floorBuffer.stroke(207, 157, 205);
     floorBuffer.strokeWeight(2);
     floorBuffer.noFill();

@@ -178,7 +178,7 @@ div.pc-content {
 }
 
 div#prog-container {
-  background-color: rgb(94, 64, 93);
+  background-color: rgb(138, 37, 23);
   width: 65%;
   height: 30px;
   padding: 2px;
@@ -246,10 +246,11 @@ div#loadingbar {
   -ms-transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
-
-  border-right: 3px solid rgb(196, 162, 122);
-  border-bottom: 3px solid rgb(196, 162, 122);
+  /* rgb(196, 162, 122) */
+  border-right: 3px solid white;
+  border-bottom: 3px solid white;
   margin: 0 0 3px 4px;
+  opacity: 0.8;
 
   width: 32px;
   height: 32px;
