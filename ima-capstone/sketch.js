@@ -43,6 +43,8 @@ let symtex, symtex2;
 let largeM, completeM, livelyM, animismM, imageryM, dollM, doorgodM, tigersM, texturesM, serrationsM, crescentsM, maojiaoM, worshipM, witchcraftM, zhuyouM, newyearM, wishM, languageM, variousM;
 let overview, fanfloor;
 let models=[];
+let scrollContainer = document.getElementsByClassName("container-fluid")[0];
+
 
 // floor
 let particle;
@@ -162,7 +164,7 @@ function setup() {
 
     createCanvas(windowWidth, windowHeight, WEBGL);
     floorBuffer = createGraphics(1000, 1000);
-    perspective(3*PI/7, width/height, 0.00001, (height/2) / tan(PI/6)*10); // width/height, the ratio
+    perspective(3*PI/7, width/height, 0.01, (height/2) / tan(PI/6)*10); // width/height, the ratio
     cursor('grab');
 
     //pattern
@@ -200,10 +202,19 @@ function draw() {
       resizeCanvas(windowWidth, windowHeight, WEBGL);
       drawMove();
       drawContents();
+
+      // Quoey, move and organize this code below
+      const scrollSpeed = 5;
+      if (mouseY > height * 2/3) {
+        scrollContainer.scrollTop += scrollSpeed;
+      } else if (mouseY < height * 1/3) {
+        //scrollContainer.scrollTop -= scrollSpeed;
+      }
+      scrollContainer.scrollTop = constrain(scrollContainer.scrollTop, 0, 300);
+
       drawFloor();
       drawPattern();
     }
-
 }
 
 function entername(){
@@ -322,6 +333,7 @@ function drawMove() {
   }
 
   cameraY = 8 * sin(frameCount / 120 + PI);
+  /*
   if (mouseIsPressed) {
     cameraLock = false;
     if (mouseY < 2*height/3) {
@@ -331,6 +343,7 @@ function drawMove() {
       cameraZ += cspeed;
     }
   }
+  */
   camera(cameraX, cameraY, cameraZ, delta_x, delta_y, -150, 0, 1, 0);
 }
 

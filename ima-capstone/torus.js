@@ -71,6 +71,7 @@ class Torus {
     this.alpha = 0;
     this.cameraL = false;
     this.scroll = false;
+    scrollContainer.scrollTop = 0; // **********
     // if (this.opacity > 0) {
     //   this.opacity -= 0.1;
     // }
