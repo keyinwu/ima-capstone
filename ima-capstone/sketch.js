@@ -15,7 +15,7 @@ let cameraX = 0;
 let cameraY = 0;
 let cameraZ = 1000;
 let startZ = 1000;
-let maxX0 = 250;
+let maxX0 = 260;
 let maxX;
 let maxZ = 1000;
 let minZ = -10;
@@ -28,6 +28,7 @@ let movespeed;
 let prevX;
 let prevY;
 let prevZ;
+let prevS = 0;
 
 // paper cutting materials
 let large, complete, lively, animism, imagery, doll, doorgod, tigers, textures, serrations, crescents, maojiao, worship, witchcraft, zhuyou, newyear, wish, language, various;
@@ -186,7 +187,7 @@ function setup() {
 
     particle = new Particle(cameraZ, 500-cameraX, floorBuffer);
 
-    setFloor();
+    // setFloor();
 
     // introbg.play();  // to add // need user action to trigger play
 
@@ -283,19 +284,14 @@ function drawMove() {
   // console.log(cameraLock);
   if (!cameraLock) {
     document.getElementById("m_scroll").style.display = "none";
-    // if (delta_x > 0) {
-    //   delta_x--;
-    // }else if (delta_x < 0) {
-    //   delta_x++;
-    // }
-    // if (delta_y > 0) {
-    //   delta_y--;
-    // }else if (delta_y < 0) {
-    //   delta_y++;
-    // }
     maxX = cameraZ*tan(atan2(maxX0, startZ));
     delta_x = 0;
-    delta_y = 0;
+    // delta_y = 0;
+    if (cameraZ >= 50) {
+      // delta_y = map(mouseY-4*height/5, 0, height/5, 0, cameraZ*2, true);
+      delta_y = lerp(delta_y, map(mouseY-height/2, 0, height/2, 0, cameraZ*2, true), 0.1);
+    }
+
     if (abs(mouseX-width/2) < 200) {
       movespeed = map(abs(mouseX-width/2), 5, 200, 0.05, 0.4, true)
     }else {
@@ -306,30 +302,33 @@ function drawMove() {
     }else{
       cameraX += 0.5*movespeed;
     }
-    if (mouseY > 4*height/5 && cameraZ >= 50) {
-      delta_y = map(mouseY-4*height/5, 0, height/5, 0, cameraZ*2, true);
-    }
   }
   if (cameraLock) {
     delta_x = map(mouseX-width/2, -width/2+100, width/2-100, -200, 200, true);
     delta_y = map(mouseY-height/2, -height/2+100, height/2-100, -100, 100, true);
   }
   //camera restriction
-  if (cameraX < -maxX) {   // to change
+  if (cameraX < -maxX) {
     cameraX = -maxX;
   }
-  if (cameraX > maxX) {    // to change
+  if (cameraX > maxX) {
     cameraX = maxX;
+  }
+  if (cameraZ < minZ) {
+    cameraZ = minZ;
+  }
+  if (cameraZ > maxZ) {
+    cameraZ = maxZ;
   }
 
   cameraY = 8 * sin(frameCount / 120 + PI);
   if (mouseIsPressed) {
     cameraLock = false;
-    if (mouseY < 2*height/3 && cameraZ >= minZ) {
-      cameraZ -= cspeed
+    if (mouseY < 2*height/3) {
+      cameraZ -= cspeed;
     }
-    if (mouseY > 2*height/3 && cameraZ <= maxZ) {
-      cameraZ += cspeed
+    if (mouseY > 2*height/3) {
+      cameraZ += cspeed;
     }
   }
   camera(cameraX, cameraY, cameraZ, delta_x, delta_y, -150, 0, 1, 0);
@@ -343,13 +342,25 @@ function mouseWheel(event) {
     document.getElementById("m_scroll").style.display = "none";
     scrolled = null;
   }
-  //console.log(event.delta);
-  // cameraLock = false;
-  // M:
-  // adjust the value.
-  // feel free to flip the direction!
-  // let speed = event.delta * -0.1;
-  // cameraZ += speed;
+  if (scene == 1) {
+    //console.log(event.delta);
+    cameraLock = false;
+    // M:
+    // adjust the value.
+    // feel free to flip the direction!
+    // let s = map(event.delta)
+    let delta = event.delta;
+    if (delta > 200) {
+      delta = 200;
+    }
+    if (delta < -200) {
+      delta = -200;
+    }
+    delta = lerp(prevS, delta, 0.1);
+    let speed = delta * -0.01;
+    cameraZ += speed;
+    prevS = delta;
+  }
 }
 
 function drawContents() {
@@ -500,23 +511,23 @@ function contentsSetup(symbol, cx, cy, cz, logging=false) {
   pop();
 }
 
-function setFloor() {
-  floorBuffer.background(0);
-  floorBuffer.push();
-  floorBuffer.translate(0, 500);
-  // floorBuffer.stroke(180);
-  floorBuffer.stroke(143, 94, 127);
-  // floorBuffer.stroke(207, 157, 205);
-  floorBuffer.strokeWeight(2);
-  floorBuffer.noFill();
-  floorBuffer.arc(0, 0, 2000, 2000, -PI/6, PI/6, PIE);
-  floorBuffer.pop();
-  floorBuffer.push();
-  floorBuffer.tint(255, 180);
-  // floorBuffer.image(floorimg, 900, 500, 80, 80);
-  // floorBuffer.image(floorimg, 680, 500, 80, 80);
-  floorBuffer.pop();
-}
+// function setFloor() { // tried to optimize
+//   floorBuffer.background(0);
+//   floorBuffer.push();
+//   floorBuffer.translate(0, 500);
+//   // floorBuffer.stroke(180);
+//   floorBuffer.stroke(143, 94, 127);
+//   // floorBuffer.stroke(207, 157, 205);
+//   floorBuffer.strokeWeight(2);
+//   floorBuffer.noFill();
+//   floorBuffer.arc(0, 0, 2000, 2000, -PI/6, PI/6, PIE);
+//   floorBuffer.pop();
+//   floorBuffer.push();
+//   floorBuffer.tint(255, 180);
+//   // floorBuffer.image(floorimg, 900, 500, 80, 80);
+//   // floorBuffer.image(floorimg, 680, 500, 80, 80);
+//   floorBuffer.pop();
+// }
 
 function drawFloor() {
     // to optimize
@@ -570,14 +581,14 @@ function drawFloor() {
 //   drawConnection();
 // }
 
-function updateFloor() {
-    // to optimize
-    // setFloor()
-    // if (requestAnimationFrame(drawFloor) % 3 == 0) {
-    // }
-    particle.showCol();
-    updateConnection();
-}
+// function updateFloor() {
+//     // to optimize
+//     // setFloor()
+//     // if (requestAnimationFrame(drawFloor) % 3 == 0) {
+//     // }
+//     particle.showCol();
+//     updateConnection();
+// }
 
 
 function drawConnection() {
