@@ -213,7 +213,7 @@ function entername(){
   // introbg.stop();
   loopbg.play();
   usrname = document.getElementById("floatingInput").value;
-  console.log(usrname);
+  // console.log(usrname);
   document.getElementById("input-name").style.display = "none";
   document.getElementById("intro").style.display = "none";
   scene = 1;
@@ -362,7 +362,7 @@ function mouseClicked() {
     cameraLock = false;
     symbols[trigidx].enter = false;
     symbols[trigidx].close = true;
-    console.log(trigidx, symbols[trigidx].close);
+    // console.log(trigidx, symbols[trigidx].close);
   }
 }
 
@@ -530,7 +530,7 @@ function contentsSetup(symbol, cx, cy, cz, logging=false) {
   triggered = triggered || symbol.isScroll();
   if (symbol.isScroll()) {
     trigidx = symbol.getIndex();
-    console.log(triggered, trigidx);
+    // console.log(triggered, trigidx);
   }
   pop();
 }
