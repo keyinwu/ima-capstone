@@ -582,6 +582,7 @@ function drawFloor() {
     rotateY(-PI/2);
     rotateX(PI/2);
     texture(floorBuffer);
+    noStroke();
     plane(1000);
     pop();
 
