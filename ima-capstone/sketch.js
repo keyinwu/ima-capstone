@@ -292,7 +292,7 @@ function drawMove() {
     // delta_y = 0;
     if (cameraZ >= 50) {
       // delta_y = map(mouseY-4*height/5, 0, height/5, 0, cameraZ*2, true);
-      delta_y = lerp(delta_y, map(mouseY-height/2, 0, height/2, 0, cameraZ*2, true), 0.1);
+      delta_y = lerp(delta_y, map(mouseY-height/2, 0, height/2, 0, cameraZ*2, true), 0.08);
     }
 
     if (abs(mouseX-width/2) < 200) {
@@ -379,7 +379,7 @@ function drawScroll() {
   } else if (mouseY < height * 1/3) {
     scrollContainer.scrollTop -= scrollSpeed;
   }
-  scrollContainer.scrollTop = constrain(scrollContainer.scrollTop, 0, 800);
+  scrollContainer.scrollTop = constrain(scrollContainer.scrollTop, 0, 1200);
 
 }
 
